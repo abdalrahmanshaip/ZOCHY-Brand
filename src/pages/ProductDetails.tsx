@@ -48,25 +48,39 @@ const ProductDetails = () => {
     <>
       <Layout>
         <div className='mx-auto  max-w-screen-xl flex justify-center mt-5 flex-wrap '>
-          <div className='md:w-1/2 w-full'>
+          <div className='md:w-1/2 w-full '>
             <div className='carousel'>
               <div
                 id='item1'
-                className='carousel-item'
+                className='carousel-item w-full'
               >
                 <img
                   src={`http://localhost:1337${data.data.attributes.image.data[0].attributes?.formats?.large?.url}`}
-                  className=''
-                  width={'60%'}
+                  className='w-[80%]'
+                />
+              </div>
+              <div
+                id='item2'
+                className='carousel-item w-full'
+              >
+                <img
+                  src={`http://localhost:1337${data.data.attributes.image.data[1].attributes?.formats?.large?.url}`}
+                  className='w-[80%]'
                 />
               </div>
             </div>
-            <div className='text-center w-[60%]'>
+            <div className='flex justify-center gap-2 py-2'>
               <a
                 href='#item1'
                 className='btn btn-xs'
               >
                 1
+              </a>
+              <a
+                href='#item2'
+                className='btn btn-xs'
+              >
+                2
               </a>
             </div>
           </div>

@@ -20,6 +20,7 @@ export interface PurpleAttributes {
   category: string
   size: string
   image: Image
+  soldOut?: boolean
 }
 
 export interface Image {
@@ -80,6 +81,7 @@ export interface PostProduct {
   image: {
     data: string
   }
+  soldOut: boolean
 }
 
 export interface TypeOwnCart {

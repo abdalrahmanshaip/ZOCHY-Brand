@@ -124,7 +124,7 @@ const AddProduct = () => {
             )}
             <div className='w-full h-[150px] border-gray-300 border border-dashed flex justify-center items-center flex-wrap gap-x-5'>
               <input
-              required={true}
+                required={true}
                 className='file-input file-input-bordered'
                 type='file'
                 onChange={(e) =>
@@ -132,7 +132,7 @@ const AddProduct = () => {
                 }
               />
               <input
-                            required={true}
+                required={true}
                 className='file-input file-input-bordered'
                 type='file'
                 onChange={(e) =>
@@ -141,11 +141,12 @@ const AddProduct = () => {
               />
             </div>
 
-            <div>
-              {selectedFile1 && <div>{selectedFile1.name}</div>}
-              {selectedFile2 && <div>{selectedFile2.name}</div>}
-            </div>
-
+            <span className='text-xl'>sold Out? <p>the default is no</p></span>
+            <input
+              type='checkbox'
+              className='toggle toggle-success block'
+              {...register('soldOut')}
+            />
             <div className='modal-action h-full flex justify-end items-end'>
               <label
                 className='btn'

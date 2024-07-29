@@ -23,7 +23,7 @@ const EditProduct = ({ id }: { id: number }) => {
     reset,
     formState: { errors },
   } = useForm<PostProduct>()
-
+  // console.log(data.data.attributes.soldOut)
   useEffect(() => {
     if (data) {
       reset({
@@ -32,6 +32,7 @@ const EditProduct = ({ id }: { id: number }) => {
         price: data?.data?.attributes?.price,
         size: data?.data?.attributes?.size,
         category: data?.data?.attributes?.category,
+        soldOut: data?.data?.attributes?.soldOut
       })
     }
   }, [data, reset])
@@ -40,7 +41,6 @@ const EditProduct = ({ id }: { id: number }) => {
     try {
       const returnData = await editData(
         formData,
-
         id
       )
       dispatch(editProducts(returnData))
@@ -137,29 +137,12 @@ const EditProduct = ({ id }: { id: number }) => {
             {errors.size && (
               <p className='text-red-400 mt-4'>Size is required</p>
             )}
-            {/* <div className='w-full h-[150px] border-gray-300 border border-dashed flex justify-center items-center flex-wrap gap-x-5'>
-              <input
-                required={true}
-                className='file-input file-input-bordered'
-                type='file'
-                onChange={(e) =>
-                  setSelectedFile1(e.target.files ? e.target.files[0] : null)
-                }
-              />
-              <input
-                required={true}
-                className='file-input file-input-bordered'
-                type='file'
-                onChange={(e) =>
-                  setSelectedFile2(e.target.files ? e.target.files[0] : null)
-                }
-              />
-            </div>
-
-            <div>
-              {selectedFile1 && <div>{selectedFile1.name}</div>}
-              {selectedFile2 && <div>{selectedFile2.name}</div>}
-            </div> */}
+          <span className='text-xl'>sold Out? <p>the default is no</p></span>
+            <input
+              type='checkbox'
+              className='toggle toggle-success block'
+              {...register('soldOut')}
+            />
             <div className='modal-action h-full flex justify-end items-end'>
               <label
                 className='btn'
