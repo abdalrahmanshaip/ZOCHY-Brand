@@ -56,10 +56,16 @@ const AdminDashboard = () => {
                           <td>{product.attributes.title}</td>
                           <td>{product.attributes.description}</td>
                           <td>{product.attributes.price}</td>
-                          <td>
+                          <td className='flex justify-center'>
                             <img
-                              className='m-auto'
-                              src={`http://localhost:1337${product.attributes.image.data.attributes?.formats.thumbnail.url}`}
+                              className=''
+                              src={`http://localhost:1337${product.attributes.image.data[0].attributes?.formats.thumbnail.url}`}
+                              alt={product.attributes.title}
+                              width='100'
+                            />
+                            <img
+                              className=''
+                              src={`http://localhost:1337${product.attributes.image.data[1].attributes?.formats.thumbnail.url}`}
                               alt={product.attributes.title}
                               width='100'
                             />
@@ -79,7 +85,7 @@ const AdminDashboard = () => {
                           <span>{product.attributes.size}</span>
                         )}</td>
                         <td>{product.attributes.category}</td>
-                          <td className='flex gap-2 justify-center  items-center'>
+                          <td className='space-y-5'>
                             <EditProduct id={product.id} />
                             <DeleteProduct
                               id={product.id}

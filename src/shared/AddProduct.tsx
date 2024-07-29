@@ -8,7 +8,8 @@ import { addProducts } from '../app/feature/admin/productSlice'
 const AddProduct = () => {
   const dispatch = useDispatch()
   const { addData } = usePostData<PostProduct>('products-admins', 'Product')
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [selectedFile1, setSelectedFile1] = useState<File | null>(null)
+  const [selectedFile2, setSelectedFile2] = useState<File | null>(null)
   const [open, setOpen] = useState(true)
   const {
     register,
@@ -18,8 +19,9 @@ const AddProduct = () => {
   } = useForm<PostProduct>()
 
   const onSubmit = async (data: PostProduct) => {
+    console.log(data, selectedFile1, selectedFile2)
     try {
-      const returnedData = await addData(data, selectedFile)
+      const returnedData = await addData(data, selectedFile1, selectedFile2)
       dispatch(addProducts(returnedData))
       setOpen(false)
       reset()
@@ -120,19 +122,29 @@ const AddProduct = () => {
             {errors.size && (
               <p className='text-red-400 mt-4'>Size is required</p>
             )}
-            <div className='w-full h-[100px] border-gray-300 border border-dashed flex justify-center items-center'>
+            <div className='w-full h-[150px] border-gray-300 border border-dashed flex justify-center items-center flex-wrap gap-x-5'>
               <input
-                className='file-input file-input-bordered  '
+              required={true}
+                className='file-input file-input-bordered'
                 type='file'
-                placeholder='Add image of product'
-                required={true}
                 onChange={(e) =>
-                  setSelectedFile(e.target.files ? e.target.files[0] : null)
+                  setSelectedFile1(e.target.files ? e.target.files[0] : null)
+                }
+              />
+              <input
+                            required={true}
+                className='file-input file-input-bordered'
+                type='file'
+                onChange={(e) =>
+                  setSelectedFile2(e.target.files ? e.target.files[0] : null)
                 }
               />
             </div>
 
-            <div>{selectedFile?.name}</div>
+            <div>
+              {selectedFile1 && <div>{selectedFile1.name}</div>}
+              {selectedFile2 && <div>{selectedFile2.name}</div>}
+            </div>
 
             <div className='modal-action h-full flex justify-end items-end'>
               <label

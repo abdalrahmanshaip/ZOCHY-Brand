@@ -3,8 +3,10 @@ import { useSelector } from 'react-redux'
 import { CategoryFilter, SizeFilter } from '.'
 import { RootState } from '../app/store'
 import { usePostData } from '../hooks/usePostData'
+import { useNavigate } from 'react-router'
 
 const Products = () => {
+  const navigate = useNavigate()
   const products = useSelector(
     (state: RootState) => state.products.ProductsFilter
   )
@@ -55,7 +57,7 @@ const Products = () => {
           <CategoryFilter />
         </div>
       </div>
-      <div className='mx-auto  max-w-screen-2xl grid gap-4 grid-cols-4 gap-y-12 mb-28  '>
+      <div className='mx-auto  max-w-screen-2xl grid gap-4 grid-cols-4 gap-y-12 mb-28 '>
         {Number(products?.data.length) > 0 ? (
           products?.data.map((product) => {
             return (
@@ -65,9 +67,12 @@ const Products = () => {
               >
                 {!loading ? (
                   <>
-                    <figure className='  h-[90%] flex justify-center items-center rounded-md '>
+                    <figure
+                      className='  h-[90%] flex justify-center items-center rounded-md  hover:mx-1 transition-all cursor-pointer'
+                      onClick={() => navigate(`/product/${product.id}`)}
+                    >
                       <img
-                        src={`http://localhost:1337${product.attributes.image.data.attributes?.formats?.large?.url}`}
+                        src={`http://localhost:1337${product.attributes.image.data[0].attributes?.formats?.large?.url}`}
                         alt='img product'
                         width='80%'
                         className='flex justify-center items-center '
@@ -76,7 +81,9 @@ const Products = () => {
                     <div className='mt-2 font-bold space-y-3 card-body'>
                       <div className='flex justify-between items-center card-title'>
                         <h2 className='text-xl'>{product.attributes.title}</h2>
-                        <p className='text-lg'>{product.attributes.price} EG</p>
+                        <p className='text-lg text-right'>
+                          {product.attributes.price} EG
+                        </p>
                       </div>
                       <p>Category: {product.attributes.category}</p>
 

@@ -23,7 +23,7 @@ export interface PurpleAttributes {
 }
 
 export interface Image {
-  data: ImageDatum
+  data: ImageDatum[]
 }
 
 export interface ImageDatum {
@@ -69,18 +69,7 @@ export interface Large {
   sizeInBytes: number
   url: string
 }
-export interface Large {
-  name: string
-  hash: string
-  ext: string
-  mime: string
-  path: null
-  width: number
-  height: number
-  size: number
-  sizeInBytes: number
-  url: string
-}
+
 
 export interface PostProduct {
   title: string

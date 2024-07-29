@@ -2,20 +2,13 @@ import axios from 'axios'
 import { toast } from 'sonner'
 
 export const useEditData = <T>(endPoint: string, successMessage: string) => {
-  const editData = async (item: T, imageFile: File | null, id: number) => {
+  const editData = async (item: T, id: number) => {
     try {
-      const formData = new FormData()
-      formData.append('data', JSON.stringify(item))
-      if (imageFile) {
-        formData.append('files.image', imageFile)
-      }
+      
       const response = await axios.put(
         `http://localhost:1337/api/${endPoint}/${id}?populate=*`,
-        formData,
         {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
+          data: item
         }
       )
       toast.success(`${successMessage} edited successfully`)

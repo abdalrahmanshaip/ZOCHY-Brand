@@ -2,7 +2,7 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 
 export const useFetchItem = <T>(endPoint: string, id: number) => {
-  const [data, setData] = useState<T | object | null>({})
+  const [data, setData] = useState<T | object>({})
   const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
