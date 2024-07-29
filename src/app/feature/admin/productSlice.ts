@@ -14,7 +14,7 @@ const initialState: ProductsState = {
   ProductsFilter: null,
   loadingProducts: false,
   category: '',
-  size: ['S', 'M', 'L', 'XL'],
+  size: ['S', 'M', 'L', 'XL', '2XL'],
 }
 
 export const ProductsSlice = createSlice({
@@ -38,20 +38,25 @@ export const ProductsSlice = createSlice({
     },
     addProducts: (state, action) => {
       state?.products?.data.push(action.payload)
+      state.ProductsFilter?.data.push(action.payload)
     },
     editProducts: (state, action) => {
-      if (state.products?.data) {
+      if (state.products?.data && state.ProductsFilter?.data) {
         const index = state.products.data.findIndex(
           (product) => product.id === action.payload.id
         )
         if (index !== -1) {
           state.products.data[index] = action.payload
+          state.ProductsFilter.data[index] = action.payload
         }
       }
     },
     deleteProducts: (state, action: PayloadAction<number>) => {
-      if (state.products?.data) {
+      if (state.products?.data && state.ProductsFilter?.data) {
         state.products.data = state.products?.data?.filter(
+          (product) => product.id !== action.payload
+        )
+        state.ProductsFilter.data = state.ProductsFilter?.data?.filter(
           (product) => product.id !== action.payload
         )
       }

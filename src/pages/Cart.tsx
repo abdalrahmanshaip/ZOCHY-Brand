@@ -180,7 +180,7 @@ const Card = () => {
           </div>
         </div>
       ) : (
-        <div>No product add to cart</div>
+        <div className='flex justify-center items-center h-[70vh] text-5xl'>You didn't add product to cart</div>
       )}
     </Layout>
   )

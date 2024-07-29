@@ -36,7 +36,6 @@ const HandleData = () => {
         dispatch(setProducts(products), setProductsFilter(products)) &&
         productsFilter &&
         dispatch(setProductsFilter(productsFilter)) &&
-        dispatch(setProductsFilter(productsFilter))
       cart && dispatch(setUserCart(cart))
     } catch (error) {
       console.error(error)

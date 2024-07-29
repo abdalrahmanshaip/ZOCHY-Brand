@@ -46,8 +46,8 @@ const Products = () => {
   // /////////////////////////////
 
   return (
-    <>
-      <div className='max-w-screen-2xl m-auto flex items-center my-4  gap-8  md:flex-nowrap flex-wrap '>
+    <div className=''>
+      <div className=' max-w-screen-2xl m-auto flex items-center my-4  gap-8  md:flex-nowrap flex-wrap '>
         <span className='text-4xl h-4 text-start w-full'>Products</span>
         <div className=' flex gap-4 items-center justify-center m-auto'>
           <p className='text-2xl md:block hidden'>Filter:</p>
@@ -55,26 +55,26 @@ const Products = () => {
           <CategoryFilter />
         </div>
       </div>
-      <div className='mx-auto  max-w-screen-2xl grid gap-4 grid-cols-4 gap-y-12 mb-28'>
+      <div className='mx-auto  max-w-screen-2xl grid gap-4 grid-cols-4 gap-y-12 mb-28  '>
         {Number(products?.data.length) > 0 ? (
           products?.data.map((product) => {
             return (
               <div
-                className=' p-3  my-10 col-span-4 md:col-span-2 lg:col-span-1'
+                className=' p-3  my-10 col-span-4 md:col-span-2 lg:col-span-1 card shadow-xl'
                 key={product.id}
               >
                 {!loading ? (
                   <>
-                    <figure className=' bg-gray-100 h-[90%] flex justify-center items-center rounded-md '>
+                    <figure className='  h-[90%] flex justify-center items-center rounded-md '>
                       <img
                         src={`http://localhost:1337${product.attributes.image.data.attributes?.formats?.large?.url}`}
                         alt='img product'
-                        width='70%'
-                        className='flex justify-center items-center'
+                        width='80%'
+                        className='flex justify-center items-center '
                       />
                     </figure>
-                    <div className='mt-2 font-bold space-y-3 '>
-                      <div className='flex justify-between items-center'>
+                    <div className='mt-2 font-bold space-y-3 card-body'>
+                      <div className='flex justify-between items-center card-title'>
                         <h2 className='text-xl'>{product.attributes.title}</h2>
                         <p className='text-lg'>{product.attributes.price} EG</p>
                       </div>
@@ -120,7 +120,7 @@ const Products = () => {
           </div>
         )}
       </div>
-    </>
+    </div>
   )
 }
 
