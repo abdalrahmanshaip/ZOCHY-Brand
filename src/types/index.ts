@@ -84,21 +84,21 @@ export interface PostProduct {
   soldOut: boolean
 }
 
-export interface TypeOwnCart {
-  data: Datum[];
-
-}
-
 export interface Datum {
-  id:         number;
+  id: number;
   attributes: Attributes;
 }
 
 export interface Attributes {
-  productId:   null | string;
-  userId:      string;
-  quantity:    number;
-  createdAt:   Date;
-  updatedAt:   Date;
+  productId: null | string;
+  userId: string;
+  quantity: number; // Ensure this field is defined
+  size: string;
+  createdAt: Date;
+  updatedAt: Date;
   publishedAt: Date;
+}
+
+export interface TypeOwnCart {
+  data: Datum[];
 }
