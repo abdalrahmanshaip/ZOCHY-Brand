@@ -9,8 +9,11 @@ import { usePostData } from '../hooks/usePostData'
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
 import { useFetchData } from '../hooks/useFetchData'
 import { toast } from 'sonner'
+import { useDispatch } from 'react-redux'
+import { addCart } from '../app/feature/own-cart/ownCartSlice'
 
 const ProductDetails = () => {
+  const dispatch = useDispatch()
   const { id } = useParams()
   const { user } = useKindeAuth()
   const navigate = useNavigate()
@@ -39,12 +42,14 @@ const ProductDetails = () => {
       return
     }
     try {
-      await addDataToUser({
+      const data = await addDataToUser({
         productId: id,
         userId: user?.id,
         size: selectedSize,
         quantity,
       })
+      dispatch(addCart(data))
+      return data
       toast.success('Added to cart')
     } catch (error) {
       console.error(error)

@@ -60,7 +60,6 @@ const Card = () => {
       setQuantities(initialQuantities)
     }
   }, [])
-
   const decreaseQuantity = (productId: number) => {
     setQuantities((prevQuantities) => {
       const currentQuantity = prevQuantities[productId] || 1
@@ -106,7 +105,7 @@ const Card = () => {
                     <img
                       src={`http://localhost:1337${product?.attributes.image.data[0].attributes.formats.thumbnail.url}`}
                       alt='img product'
-                      width={'30%'}
+                      className='w-52  object-cover rounded-md' // Tailwind CSS classes for styling
                     />
                     <div className='titles text-left w-full'>
                       <div className='flex justify-between items-center'>
@@ -129,19 +128,19 @@ const Card = () => {
                           {/* Show only the selected size */}
                         </span>
                       </div>
-                      <div className='mt-6 btn btn-circle w-32'>
+                      <div className='flex items-center my-5'>
                         <div className='text-center flex gap-4'>
                           <h1
-                            className='text-2xl cursor-pointer'
+                            className='btn bg-black btn-sm text-white'
                             onClick={() => decreaseQuantity(product!.id)}
                           >
                             -
                           </h1>
-                          <span className='text-2xl'>
+                          <span className='mx-4 text-xl'>
                             {quantities[product!.id] || 1} {/* Default to 1 */}
                           </span>
                           <h1
-                            className='text-2xl cursor-pointer'
+                            className='btn bg-black btn-sm text-white'
                             onClick={() => increaseQuantity(product!.id)}
                           >
                             +

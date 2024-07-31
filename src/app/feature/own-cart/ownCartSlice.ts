@@ -14,6 +14,9 @@ export const OwnCartSlice = createSlice({
     setUserCart: (state, action) => {
       state.userCart = action.payload
     },
+    addCart: (state, action) => {
+      state.userCart?.data.push(action.payload)
+    },
     deleteCart: (state, action) => {
       if (state.userCart) {
         state.userCart.data = state.userCart.data.filter(
@@ -24,6 +27,6 @@ export const OwnCartSlice = createSlice({
   },
 })
 
-export const { setUserCart, deleteCart } = OwnCartSlice.actions
+export const { setUserCart, addCart, deleteCart } = OwnCartSlice.actions
 
 export default OwnCartSlice.reducer

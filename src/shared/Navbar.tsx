@@ -6,7 +6,8 @@ import { RootState } from '../app/store'
 import Auth from '../auth/Auth'
 import logoImg from '../assets/7B4ECA45-1509-40D2-95C3-68D59A7E628E-removebg-preview.png'
 const Navbar = () => {
-  const cart = useSelector((state: RootState) => state.cart.cart)
+  const cart = useSelector((state: RootState) => state.ownCart.userCart)
+  console.log(cart)
   const { user } = useKindeAuth()
   const pathName = window.location.pathname
   const links = [

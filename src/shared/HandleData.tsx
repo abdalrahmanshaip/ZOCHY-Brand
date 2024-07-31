@@ -5,7 +5,6 @@ import {
   setProducts,
   setProductsFilter,
 } from '../app/feature/admin/productSlice'
-import { setLoadingCart } from '../app/feature/user/cartSlice'
 import { RootState } from '../app/store'
 import { useFetchData } from '../hooks/useFetchData'
 import { TypeProducts } from '../types'
@@ -41,7 +40,6 @@ const HandleData = () => {
       console.error(error)
     } finally {
       dispatch(setLoadingProducts(false))
-      dispatch(setLoadingCart(false))
     }
   }, [products, productsFilter, cart, dispatch])
 

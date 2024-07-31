@@ -90,9 +90,9 @@ export interface Datum {
 }
 
 export interface Attributes {
-  productId: null | string;
+  productId: number;
   userId: string;
-  quantity: number; // Ensure this field is defined
+  quantity: number; 
   size: string;
   createdAt: Date;
   updatedAt: Date;
