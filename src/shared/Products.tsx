@@ -59,15 +59,33 @@ const Products = () => {
                     )}
                   </figure>
                   <div className='mt-4 flex-grow'>
-                    <div className='flex justify-between items-center mb-2'>
-                      <h2 className='text-xl font-bold'>{product.attributes.title}</h2>
-                      <p className='text-lg text-right'>{product.attributes.price} EG</p>
+                    <div className=' mb-2'>
+                      <h2 className='text-xl font-bold'>
+                        {product.attributes.title}
+                      </h2>
+                      <p className='my-2   text-start '>
+                        {product.attributes.oldPrice ? (
+                          <span className='line-through mr-4'>
+                            {product.attributes.oldPrice
+                              ? product.attributes.oldPrice + 'EG'
+                              : ''}
+                          </span>
+                        ) : (
+                          ''
+                        )}
+                        {product.attributes.price} EG
+                      </p>
                     </div>
-                    <p className='text-sm text-gray-600'>Category: {product.attributes.category}</p>
+                    <p className='text-sm text-gray-600'>
+                      Category: {product.attributes.category}
+                    </p>
                     <div className='flex gap-2 mt-2'>
                       {Array.isArray(product.attributes.size) ? (
                         product.attributes.size.map((size, i) => (
-                          <span key={i} className='mr-2 btn btn-sm'>
+                          <span
+                            key={i}
+                            className='mr-2 btn btn-sm'
+                          >
                             {size}
                           </span>
                         ))

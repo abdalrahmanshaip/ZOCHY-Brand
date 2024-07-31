@@ -34,10 +34,10 @@ const AdminDashboard = () => {
                 <thead>
                   <tr>
                     <th>Name</th>
-                    <th>Description</th>
+                    <th>Sold Out</th>
                     <th>price</th>
-                    <th>image</th>
-                    <th>size</th>
+                    <th>Image</th>
+                    <th>Size</th>
                     <th>Category</th>
                     <th>Action</th>
                   </tr>
@@ -54,8 +54,8 @@ const AdminDashboard = () => {
                           className=''
                         >
                           <td>{product.attributes.title}</td>
-                          <td>{product.attributes.description}</td>
-                          <td>{product.attributes.price}</td>
+                          <td>{product.attributes.soldOut ? "Not sold out" : 'Sold out'}</td>
+                          <td><span className='line-through'>{product.attributes.oldPrice ? product.attributes.oldPrice : ''}</span> {product.attributes.price}</td>
                           <td className='flex justify-center'>
                             <img
                               className=''

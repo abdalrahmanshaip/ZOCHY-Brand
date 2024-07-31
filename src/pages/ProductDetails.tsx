@@ -1,19 +1,22 @@
-import React, { useState } from 'react'
-import { useNavigate, useParams } from 'react-router'
-import { useFetchItem } from '../hooks/useFetchItem'
-import Layout from '../layout/Layout'
-import { ItemProduct, TypeProducts } from '../types'
-import LoadingPage from '../loading/LoadingPage'
 import { useKindeAuth } from '@kinde-oss/kinde-auth-react'
-import { usePostData } from '../hooks/usePostData'
+import { useState } from 'react'
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
-import { useFetchData } from '../hooks/useFetchData'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate, useParams } from 'react-router'
 import { toast } from 'sonner'
-import { useDispatch } from 'react-redux'
 import { addCart } from '../app/feature/own-cart/ownCartSlice'
+import { useFetchData } from '../hooks/useFetchData'
+import { useFetchItem } from '../hooks/useFetchItem'
+import { usePostData } from '../hooks/usePostData'
+import Layout from '../layout/Layout'
+import LoadingPage from '../loading/LoadingPage'
+import { ItemProduct, TypeProducts } from '../types'
+import { RootState } from '../app/store'
 
 const ProductDetails = () => {
   const dispatch = useDispatch()
+  const cartItem = useSelector((state: RootState) => state.ownCart.userCart)
+
   const { id } = useParams()
   const { user } = useKindeAuth()
   const navigate = useNavigate()
@@ -24,13 +27,14 @@ const ProductDetails = () => {
     data: ItemProduct
     loading: boolean
   }
-  const { data: productAlsoLike } = useFetchData<TypeProducts>('products-admins?')
-  const productWithTheSameCategory = productAlsoLike?.data
-    .filter(product =>
+  const { data: productAlsoLike } =
+    useFetchData<TypeProducts>('products-admins?')
+  const productWithTheSameCategory = productAlsoLike?.data.filter(
+    (product) =>
       product?.id !== data.data?.id &&
       product.attributes.soldOut === false &&
-      product.attributes.category === data.data.attributes.category
-    )
+      product.attributes?.category === data.data.attributes?.category
+  )
   const { addData: addDataToUser } = usePostData('cart-items', 'Product cart')
 
   const [selectedSize, setSelectedSize] = useState<string | null>(null)
@@ -39,6 +43,14 @@ const ProductDetails = () => {
   const handleAddToCart = async (id: number) => {
     if (!selectedSize) {
       toast.error('No size selected')
+      return
+    }
+    const isProductInCart = cartItem?.data.some(
+      (cart) => cart.attributes.productId == id
+    )
+
+    if (isProductInCart) {
+      toast.error('Product already in cart')
       return
     }
     try {
@@ -50,7 +62,6 @@ const ProductDetails = () => {
       })
       dispatch(addCart(data))
       return data
-      toast.success('Added to cart')
     } catch (error) {
       console.error(error)
       toast.error('Failed to add to cart')
@@ -60,7 +71,10 @@ const ProductDetails = () => {
   const skeleton: JSX.Element[] = []
   for (let i = 1; i <= (productWithTheSameCategory?.length || 0); i++) {
     skeleton.push(
-      <div className='gap-4 grid' key={i}>
+      <div
+        className='gap-4 grid'
+        key={i}
+      >
         <div className='skeleton h-32 w-full'></div>
         <div className='skeleton h-4 w-28'></div>
         <div className='skeleton h-4 w-full'></div>
@@ -99,7 +113,11 @@ const ProductDetails = () => {
                 className='cursor-pointer'
                 key={index}
               >
-                {index === 0 ? <IoIosArrowBack size={20} /> : <IoIosArrowForward size={20} />}
+                {index === 0 ? (
+                  <IoIosArrowBack size={20} />
+                ) : (
+                  <IoIosArrowForward size={20} />
+                )}
               </a>
             ))}
           </div>
@@ -108,7 +126,18 @@ const ProductDetails = () => {
           <span className='text-gray-400'>ZOCHY</span>
           <p className='title text-4xl'>{data.data.attributes.title}</p>
           <p className='title text-4xl'>{data.data.attributes.category}</p>
-          <p className='title text-xl'>LE {data.data.attributes.price} EG</p>
+          <p className='title text-xl'>
+            {data.data.attributes.oldPrice ? (
+              <span className='line-through mr-4'>
+                {data.data.attributes.oldPrice
+                  ? 'LE ' + data.data.attributes.oldPrice + ' EG'
+                  : ''}
+              </span>
+            ) : (
+              ''
+            )}{' '}
+            LE {data.data.attributes.price} EG
+          </p>
           <div className=''>
             <p className='text-2xl mb-2'>Size:</p>
             {Array.isArray(data.data.attributes.size) ? (
@@ -130,21 +159,23 @@ const ProductDetails = () => {
           <div className='flex items-center'>
             <button
               className='btn bg-black btn-sm text-white'
-              onClick={() => setQuantity(q => Math.max(1, q - 1))}
+              onClick={() => setQuantity((q) => Math.max(1, q - 1))}
             >
               -
             </button>
             <span className='mx-4 text-xl'>{quantity}</span>
             <button
               className='btn bg-black  btn-sm text-white'
-              onClick={() => setQuantity(q => q + 1)}
+              onClick={() => setQuantity((q) => q + 1)}
             >
               +
             </button>
           </div>
           <button
             className='btn bg-black text-white w-full'
-            onClick={() => handleAddToCart(data.data.id)}
+            onClick={() => {
+              handleAddToCart(data.data.id)
+            }}
           >
             Add to cart
           </button>

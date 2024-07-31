@@ -28,21 +28,18 @@ const EditProduct = ({ id }: { id: number }) => {
     if (data) {
       reset({
         title: data?.data?.attributes?.title,
-        description: data?.data?.attributes?.description,
+        oldPrice: data?.data?.attributes?.oldPrice,
         price: data?.data?.attributes?.price,
         size: data?.data?.attributes?.size,
         category: data?.data?.attributes?.category,
-        soldOut: data?.data?.attributes?.soldOut
+        soldOut: data?.data?.attributes?.soldOut,
       })
     }
   }, [data, reset])
 
   const onSubmit = async (formData: PostProduct) => {
     try {
-      const returnData = await editData(
-        formData,
-        id
-      )
+      const returnData = await editData(formData, id)
       dispatch(editProducts(returnData))
       setOpen(false)
     } catch (error) {
@@ -88,14 +85,13 @@ const EditProduct = ({ id }: { id: number }) => {
               <p className='text-red-400 mt-4'>Title is required</p>
             )}
             <input
-              className='input input-bordered w-full'
-              type='text'
-              placeholder='Add description'
-              {...register('description', { required: true })}
+              className='input input-bordered w-full '
+              type='number'
+              placeholder='Add old price of product'
+              {...register('oldPrice', {
+                required: false,
+              })}
             />
-            {errors.description && (
-              <p className='text-red-400 mt-4'>Description is required</p>
-            )}
             <input
               className='input input-bordered w-full'
               type='number'
@@ -137,7 +133,9 @@ const EditProduct = ({ id }: { id: number }) => {
             {errors.size && (
               <p className='text-red-400 mt-4'>Size is required</p>
             )}
-          <span className='text-xl'>sold Out? <p>the default is no</p></span>
+            <span className='text-xl'>
+              sold Out? <p>the default is no</p>
+            </span>
             <input
               type='checkbox'
               className='toggle toggle-success block'

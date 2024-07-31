@@ -21,7 +21,8 @@ const Card = () => {
     (item) => item.attributes.userId === user?.id
   )
 
-  const productIds = userCartItems?.map((item) => item.attributes.productId)
+  const productIds = userCartItems?.map((item) => item.attributes.productId )
+  
 
   const { data: productData } = useFetchData<TypeProducts>(
     `products-admins/?id=${productIds}&`
@@ -41,12 +42,7 @@ const Card = () => {
 
   const handleDelete = (cartId: number) => {
     deleteData(cartId)
-      .then(() => {
-        dispatch(deleteCart(cartId))
-      })
-      .catch((error) => {
-        console.error('Failed to delete cart item:', error)
-      })
+    dispatch(deleteCart(cartId))
   }
 
   const [quantities, setQuantities] = useState<Quantities>({})
@@ -64,7 +60,6 @@ const Card = () => {
     setQuantities((prevQuantities) => {
       const currentQuantity = prevQuantities[productId] || 1
       const newQuantity = Math.max(currentQuantity - 1, 1)
-      // console.log(`Decreasing quantity for product ${productId}: ${newQuantity}`)
       return {
         ...prevQuantities,
         [productId]: newQuantity,
@@ -75,7 +70,6 @@ const Card = () => {
   const increaseQuantity = (productId: number) => {
     setQuantities((prevQuantities) => {
       const newQuantity = (prevQuantities[productId] || 1) + 1
-      // console.log(`Increasing quantity for product ${productId}: ${newQuantity}`)
       return {
         ...prevQuantities,
         [productId]: newQuantity,
@@ -97,6 +91,7 @@ const Card = () => {
                 const cartItem = userCartItems?.find(
                   (item) => Number(item.attributes.productId) === product?.id
                 )
+
                 return (
                   <div
                     key={product?.id}
@@ -114,7 +109,7 @@ const Card = () => {
                         </h1>
                         <h1
                           className='text-2xl text-gray-500 cursor-pointer text-center w-16 h-10'
-                          onClick={() => cartItem && handleDelete(cartItem.id)}
+                          onClick={() => cartItem && handleDelete(cartItem?.id)}
                         >
                           x
                         </h1>
@@ -137,7 +132,7 @@ const Card = () => {
                             -
                           </h1>
                           <span className='mx-4 text-xl'>
-                            {quantities[product!.id] || 1} {/* Default to 1 */}
+                            {quantities[product!.id]} {/* Default to 1 */}
                           </span>
                           <h1
                             className='btn bg-black btn-sm text-white'

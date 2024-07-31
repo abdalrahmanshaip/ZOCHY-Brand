@@ -12,7 +12,7 @@ export interface ProductsDatum {
 
 export interface PurpleAttributes {
   title: string
-  description: string
+  oldPrice: number
   price: number
   createdAt?: Date
   updatedAt?: Date
@@ -74,7 +74,7 @@ export interface Large {
 
 export interface PostProduct {
   title: string
-  description: string
+  oldPrice: number
   price: number
   category: string
   size: string

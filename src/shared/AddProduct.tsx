@@ -69,15 +69,15 @@ const AddProduct = () => {
             {errors.title && (
               <p className='text-red-400 mt-4'>Title is required</p>
             )}
+
             <input
               className='input input-bordered w-full '
-              type='text'
-              placeholder='Add description'
-              {...register('description', { required: true })}
+              type='number'
+              placeholder='Add old price of product'
+              {...register('oldPrice', {
+                required: false,
+              })}
             />
-            {errors.description && (
-              <p className='text-red-400 mt-4'>Description is required</p>
-            )}
             <input
               className='input input-bordered w-full '
               type='number'
@@ -141,7 +141,9 @@ const AddProduct = () => {
               />
             </div>
 
-            <span className='text-xl'>sold Out? <p>the default is no</p></span>
+            <span className='text-xl'>
+              sold Out? <p>the default is no</p>
+            </span>
             <input
               type='checkbox'
               className='toggle toggle-success block'
