@@ -32,6 +32,7 @@ const EditProduct = ({ id }: { id: number }) => {
         price: data?.data?.attributes?.price,
         size: data?.data?.attributes?.size,
         category: data?.data?.attributes?.category,
+        maximumQuantity: data?.data?.attributes?.maximumQuantity,
         soldOut: data?.data?.attributes?.soldOut,
       })
     }
@@ -132,6 +133,17 @@ const EditProduct = ({ id }: { id: number }) => {
             </select>
             {errors.size && (
               <p className='text-red-400 mt-4'>Size is required</p>
+            )}
+            <input
+              className='input input-bordered w-full '
+              type='number'
+              placeholder='maximum quantity of product'
+              {...register('maximumQuantity', {
+                required: true,
+              })}
+            />
+            {errors.maximumQuantity && (
+              <p className='text-red-400 mt-4'>maximum quantity is required</p>
             )}
             <span className='text-xl'>
               sold Out? <p>the default is no</p>

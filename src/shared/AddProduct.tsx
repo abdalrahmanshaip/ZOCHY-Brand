@@ -69,7 +69,6 @@ const AddProduct = () => {
             {errors.title && (
               <p className='text-red-400 mt-4'>Title is required</p>
             )}
-
             <input
               className='input input-bordered w-full '
               type='number'
@@ -121,6 +120,17 @@ const AddProduct = () => {
             </select>
             {errors.size && (
               <p className='text-red-400 mt-4'>Size is required</p>
+            )}
+            <input
+              className='input input-bordered w-full '
+              type='number'
+              placeholder='maximum quantity of product'
+              {...register('maximumQuantity', {
+                required: true,
+              })}
+            />
+            {errors.maximumQuantity && (
+              <p className='text-red-400 mt-4'>maximum quantity is required</p>
             )}
             <div className='w-full h-[150px] border-gray-300 border border-dashed flex justify-center items-center flex-wrap gap-x-5'>
               <input

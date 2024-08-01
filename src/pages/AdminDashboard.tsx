@@ -6,7 +6,9 @@ import LoadingPage from '../loading/LoadingPage'
 
 const AdminDashboard = () => {
   const products = useSelector((state: RootState) => state.products.products)
-  const loading = useSelector((state: RootState) => state.products.loadingProducts)
+  const loading = useSelector(
+    (state: RootState) => state.products.loadingProducts
+  )
   const skeletons: JSX.Element[] = []
   for (let i = 1; i <= (products?.data?.length as number); i++) {
     skeletons.push(
@@ -39,6 +41,7 @@ const AdminDashboard = () => {
                     <th>Image</th>
                     <th>Size</th>
                     <th>Category</th>
+                    <th>maximum quantity</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -54,8 +57,19 @@ const AdminDashboard = () => {
                           className=''
                         >
                           <td>{product.attributes.title}</td>
-                          <td>{product.attributes.soldOut ? "Not sold out" : 'Sold out'}</td>
-                          <td><span className='line-through'>{product.attributes.oldPrice ? product.attributes.oldPrice : ''}</span> {product.attributes.price}</td>
+                          <td>
+                            {product.attributes.soldOut
+                              ? 'Not sold out'
+                              : 'Sold out'}
+                          </td>
+                          <td>
+                            <span className='line-through'>
+                              {product.attributes.oldPrice
+                                ? product.attributes.oldPrice
+                                : ''}
+                            </span>{' '}
+                            {product.attributes.price}
+                          </td>
                           <td className='flex justify-center'>
                             <img
                               className=''
@@ -70,21 +84,25 @@ const AdminDashboard = () => {
                               width='100'
                             />
                           </td>
-                          <td> {Array.isArray(product.attributes.size) ? (
-                            product.attributes.size.map((size, i) => {
-                            return (
-                              <span
-                              key={i}
-                                className='mr-2'
-                                >
-                                {size}
-                              </span>
-                            )
-                          })
-                        ) : (
-                          <span>{product.attributes.size}</span>
-                        )}</td>
-                        <td>{product.attributes.category}</td>
+                          <td>
+                            {' '}
+                            {Array.isArray(product.attributes.size) ? (
+                              product.attributes.size.map((size, i) => {
+                                return (
+                                  <span
+                                    key={i}
+                                    className='mr-2'
+                                  >
+                                    {size}
+                                  </span>
+                                )
+                              })
+                            ) : (
+                              <span>{product.attributes.size}</span>
+                            )}
+                          </td>
+                          <td>{product.attributes.category}</td>
+                          <td>{product.attributes.maximumQuantity}</td>
                           <td className='space-y-5'>
                             <EditProduct id={product.id} />
                             <DeleteProduct

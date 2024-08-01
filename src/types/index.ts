@@ -19,6 +19,7 @@ export interface PurpleAttributes {
   publishedAt?: Date
   category: string
   size: string
+  maximumQuantity: number 
   image: Image
   soldOut?: boolean
 }
@@ -78,6 +79,7 @@ export interface PostProduct {
   price: number
   category: string
   size: string
+  maximumQuantity: number 
   image: {
     data: string
   }
