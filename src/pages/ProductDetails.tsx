@@ -101,7 +101,7 @@ const ProductDetails = () => {
             LE {data.data.attributes.price} EG
           </p>
           <div className='flex items-center gap-x-2'>
-          <p className='text-2xl mb-2 w-fit'>Size:</p>
+            <p className='text-2xl mb-2 w-fit'>Size:</p>
             {Array.isArray(data.data.attributes.size) ? (
               data.data.attributes.size.map((size, i) => (
                 <span
@@ -129,17 +129,18 @@ const ProductDetails = () => {
             <button
               className='btn bg-black  btn-sm text-white'
               onClick={() => setQuantity((q) => q + 1)}
+              disabled={quantity >= data.data.attributes.maximumQuantity}
             >
               +
             </button>
           </div>
-          <button className='w-full'>
+          <div >
             <AddToCart
               id={data.data.id}
               size={selectedSize}
               quantity={quantity}
             />
-          </button>
+          </div>
         </div>
       </div>
       <p className='text-center text-4xl my-10 font-bold'>You may also like</p>
@@ -167,11 +168,20 @@ const ProductDetails = () => {
                     )}
                   </figure>
                   <div className='mt-4 flex-grow'>
-                    <div className='flex justify-between items-center mb-2'>
+                    <div className=' justify-between items-center mb-2'>
                       <h2 className='text-xl font-bold'>
                         {product.attributes.title}
                       </h2>
-                      <p className='text-lg text-right'>
+                      <p className='text-lg text-start'>
+                        {data.data.attributes.oldPrice ? (
+                          <span className='line-through mr-2'>
+                            {data.data.attributes.oldPrice
+                              ? 'LE ' + data.data.attributes.oldPrice + ' EG'
+                              : ''}
+                          </span>
+                        ) : (
+                          ''
+                        )}{' '}
                         {product.attributes.price} EG
                       </p>
                     </div>

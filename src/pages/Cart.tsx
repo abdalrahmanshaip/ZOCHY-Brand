@@ -7,6 +7,7 @@ import { useDeleteData } from '../hooks/useDeleteData'
 import { useFetchData } from '../hooks/useFetchData'
 import Layout from '../layout/Layout'
 import { TypeProducts } from '../types'
+import { useEditData } from '../hooks/useEditData'
 
 interface Quantities {
   [key: number]: number
@@ -16,6 +17,7 @@ const Card = () => {
   const dispatch = useDispatch()
   const { user } = useKindeAuth()
   const userCart = useSelector((state: RootState) => state.ownCart.userCart)
+
 
   const userCartItems = userCart?.data.filter(
     (item) => item.attributes.userId === user?.id
@@ -44,6 +46,7 @@ const Card = () => {
     dispatch(deleteCart(cartId))
   }
 
+  const { editData } = useEditData('cart-items', 'quantity')
   const [quantities, setQuantities] = useState<Quantities>({})
 
   useEffect(() => {
@@ -55,10 +58,25 @@ const Card = () => {
       setQuantities(initialQuantities)
     }
   }, [])
+
+  const updateQuantityInApi = async (
+    productId: number,
+    newQuantity: number
+  ) => {
+    const cartItem = userCartItems?.find(
+      (item) => Number(item.attributes.productId) === productId
+    )
+
+    if (cartItem) {
+      await editData({ quantity: newQuantity }, cartItem.id)
+    }
+  }
+
   const decreaseQuantity = (productId: number) => {
     setQuantities((prevQuantities) => {
       const currentQuantity = prevQuantities[productId] || 1
       const newQuantity = Math.max(currentQuantity - 1, 1)
+      updateQuantityInApi(productId, newQuantity) // Update API
       return {
         ...prevQuantities,
         [productId]: newQuantity,
@@ -69,6 +87,7 @@ const Card = () => {
   const increaseQuantity = (productId: number) => {
     setQuantities((prevQuantities) => {
       const newQuantity = (prevQuantities[productId] || 1) + 1
+      updateQuantityInApi(productId, newQuantity) // Update API
       return {
         ...prevQuantities,
         [productId]: newQuantity,
@@ -133,21 +152,25 @@ const Card = () => {
                       </div>
                       <div className='flex items-center my-5'>
                         <div className='text-center flex gap-4'>
-                          <h1
+                          <button
                             className='btn bg-black btn-sm text-white'
                             onClick={() => decreaseQuantity(product!.id)}
                           >
                             -
-                          </h1>
+                          </button>
                           <span className='mx-4 text-xl'>
                             {quantities[product!.id]} {/* Default to 1 */}
                           </span>
-                          <h1
+                          <button
                             className='btn bg-black btn-sm text-white'
                             onClick={() => increaseQuantity(product!.id)}
+                            disabled={
+                              quantities[product!.id] >=
+                              product!.attributes.maximumQuantity
+                            }
                           >
                             +
-                          </h1>
+                          </button>
                         </div>
                       </div>
                     </div>
