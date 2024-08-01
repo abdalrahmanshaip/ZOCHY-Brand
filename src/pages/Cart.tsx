@@ -21,8 +21,7 @@ const Card = () => {
     (item) => item.attributes.userId === user?.id
   )
 
-  const productIds = userCartItems?.map((item) => item.attributes.productId )
-  
+  const productIds = userCartItems?.map((item) => item.attributes.productId)
 
   const { data: productData } = useFetchData<TypeProducts>(
     `products-admins/?id=${productIds}&`
@@ -115,6 +114,15 @@ const Card = () => {
                         </h1>
                       </div>
                       <p className='text-xl text-gray-500 my-2'>
+                        {product?.attributes.oldPrice ? (
+                          <span className='line-through mr-4'>
+                            {product.attributes.oldPrice
+                              ? product.attributes.oldPrice + 'EG'
+                              : ''}
+                          </span>
+                        ) : (
+                          ''
+                        )}
                         {product?.attributes.price} EG
                       </p>
                       <div className='flex gap-2'>
@@ -170,7 +178,7 @@ const Card = () => {
           </div>
         </div>
       ) : (
-        <div className='flex justify-center items-center h-[70vh] text-5xl'>
+        <div className='flex justify-center items-center h-[70vh] text-5xl text-center'>
           You didn't add product to cart
         </div>
       )}

@@ -1,24 +1,15 @@
-import { useKindeAuth } from '@kinde-oss/kinde-auth-react'
 import { useState } from 'react'
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
-import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router'
-import { toast } from 'sonner'
-import { addCart } from '../app/feature/own-cart/ownCartSlice'
 import { useFetchData } from '../hooks/useFetchData'
 import { useFetchItem } from '../hooks/useFetchItem'
-import { usePostData } from '../hooks/usePostData'
 import Layout from '../layout/Layout'
 import LoadingPage from '../loading/LoadingPage'
+import { AddToCart } from '../shared'
 import { ItemProduct, TypeProducts } from '../types'
-import { RootState } from '../app/store'
 
 const ProductDetails = () => {
-  const dispatch = useDispatch()
-  const cartItem = useSelector((state: RootState) => state.ownCart.userCart)
-
   const { id } = useParams()
-  const { user } = useKindeAuth()
   const navigate = useNavigate()
   const { data, loading } = useFetchItem<ItemProduct>(
     'products-admins',
@@ -35,38 +26,9 @@ const ProductDetails = () => {
       product.attributes.soldOut === false &&
       product.attributes?.category === data.data.attributes?.category
   )
-  const { addData: addDataToUser } = usePostData('cart-items', 'Product cart')
 
   const [selectedSize, setSelectedSize] = useState<string | null>(null)
   const [quantity, setQuantity] = useState<number>(1)
-
-  const handleAddToCart = async (id: number) => {
-    if (!selectedSize) {
-      toast.error('No size selected')
-      return
-    }
-    const isProductInCart = cartItem?.data.some(
-      (cart) => cart.attributes.productId == id
-    )
-
-    if (isProductInCart) {
-      toast.error('Product already in cart')
-      return
-    }
-    try {
-      const data = await addDataToUser({
-        productId: id,
-        userId: user?.id,
-        size: selectedSize,
-        quantity,
-      })
-      dispatch(addCart(data))
-      return data
-    } catch (error) {
-      console.error(error)
-      toast.error('Failed to add to cart')
-    }
-  }
 
   const skeleton: JSX.Element[] = []
   for (let i = 1; i <= (productWithTheSameCategory?.length || 0); i++) {
@@ -122,7 +84,7 @@ const ProductDetails = () => {
             ))}
           </div>
         </div>
-        <div className='md:w-1/2 w-full space-y-2'>
+        <div className='md:w-1/2 w-full space-y-5'>
           <span className='text-gray-400'>ZOCHY</span>
           <p className='title text-4xl'>{data.data.attributes.title}</p>
           <p className='title text-4xl'>{data.data.attributes.category}</p>
@@ -138,8 +100,8 @@ const ProductDetails = () => {
             )}{' '}
             LE {data.data.attributes.price} EG
           </p>
-          <div className=''>
-            <p className='text-2xl mb-2'>Size:</p>
+          <div className='flex items-center gap-x-2'>
+          <p className='text-2xl mb-2 w-fit'>Size:</p>
             {Array.isArray(data.data.attributes.size) ? (
               data.data.attributes.size.map((size, i) => (
                 <span
@@ -171,17 +133,16 @@ const ProductDetails = () => {
               +
             </button>
           </div>
-          <button
-            className='btn bg-black text-white w-full'
-            onClick={() => {
-              handleAddToCart(data.data.id)
-            }}
-          >
-            Add to cart
+          <button className='w-full'>
+            <AddToCart
+              id={data.data.id}
+              size={selectedSize}
+              quantity={quantity}
+            />
           </button>
         </div>
       </div>
-      <p className='text-center text-4xl my-10'>You may also like</p>
+      <p className='text-center text-4xl my-10 font-bold'>You may also like</p>
       <div className='mx-auto max-w-screen-2xl grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-12 mb-4'>
         {Number(productWithTheSameCategory?.length) > 0 ? (
           productWithTheSameCategory?.map((product) => (

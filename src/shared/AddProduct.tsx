@@ -10,7 +10,7 @@ const AddProduct = () => {
   const { addData } = usePostData<PostProduct>('products-admins', 'Product')
   const [selectedFile1, setSelectedFile1] = useState<File | null>(null)
   const [selectedFile2, setSelectedFile2] = useState<File | null>(null)
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(false)
   const {
     register,
     handleSubmit,

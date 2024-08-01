@@ -28,7 +28,7 @@ function App() {
   )
   return (
     <>
-      <Toaster />
+      <Toaster richColors/>
       <RouterProvider router={router} />
       <HandleData />
     </>

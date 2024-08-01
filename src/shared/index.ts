@@ -1,4 +1,5 @@
 import AddProduct from './AddProduct'
+import AddToCart from './AddToCart'
 import CategoryFilter from './CategoryFilter'
 import DeleteProduct from './DeleteProduct'
 import EditProduct from './EditProduct'
@@ -18,4 +19,5 @@ export {
   Products,
   CategoryFilter,
   SizeFilter,
+  AddToCart
 }

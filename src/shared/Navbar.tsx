@@ -44,12 +44,14 @@ const Navbar = () => {
                       key={link.name}
                       className={` ${
                         pathName === link.href ? 'border-b border-black' : ''
-                      } ${
+                      } 
+                      ${
                         link.name === 'Cart' &&
                         `${
                           (cart?.data.length as number) > 0 && 'text-red-500'
                         } `
-                      } relative`}
+                      } 
+                      relative`}
                     >
                       <Link to={link.href}>{link.name}</Link>
                     </li>
@@ -79,9 +81,14 @@ const Navbar = () => {
                         key={link.name}
                         className={` ${
                           pathName === link.href
-                            ? 'bg-black text-white p-1 rounded-xl'
+                            ? 'bg-black text-white p-1 rounded-xl' 
                             : ''
-                        }`}
+                        }  ${
+                        link.name === 'Cart' &&
+                        `${
+                          (cart?.data.length as number) > 0 && 'text-red-500'
+                        } `
+                      } `}
                       >
                         <Link to={link.href}>{link.name}</Link>
                       </li>
