@@ -7,6 +7,7 @@ import HandleData from './HandleData'
 import Hero from './Hero'
 import Navbar from './Navbar'
 import Products from './Products'
+import SendEmail from './SendEmail'
 import SizeFilter from './SizeFilter'
 
 export {
@@ -19,5 +20,6 @@ export {
   Products,
   CategoryFilter,
   SizeFilter,
-  AddToCart
+  AddToCart,
+  SendEmail,
 }

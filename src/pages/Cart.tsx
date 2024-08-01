@@ -6,8 +6,10 @@ import { RootState } from '../app/store'
 import { useDeleteData } from '../hooks/useDeleteData'
 import { useFetchData } from '../hooks/useFetchData'
 import Layout from '../layout/Layout'
-import { TypeProducts } from '../types'
+import { ProductsDatum, TypeProducts } from '../types'
 import { useEditData } from '../hooks/useEditData'
+
+import { SendEmail } from '../shared'
 
 interface Quantities {
   [key: number]: number
@@ -17,7 +19,6 @@ const Card = () => {
   const dispatch = useDispatch()
   const { user } = useKindeAuth()
   const userCart = useSelector((state: RootState) => state.ownCart.userCart)
-
 
   const userCartItems = userCart?.data.filter(
     (item) => item.attributes.userId === user?.id
@@ -195,9 +196,13 @@ const Card = () => {
               <span className='font-bold text-xl'>Total</span>
               <span className='font-bold text-xl'>{totalPrice} EG</span>
             </div>
-            <button className='w-full text-white btn btn-outline bg-black'>
-              PROCEED TO CHECKOUT
-            </button>
+            {userCartProducts && (
+              <SendEmail
+                userCartProducts={userCartProducts as ProductsDatum[]}
+                totalPrice={totalPrice}
+                quantities={quantities}
+              />
+            )}
           </div>
         </div>
       ) : (
