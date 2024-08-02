@@ -111,7 +111,7 @@ const Checkout = () => {
               )
               return (
                 <div
-                  className=''
+                  className='mb-3'
                   key={product.id}
                 >
                   <div className='top-item flex  items-center '>
