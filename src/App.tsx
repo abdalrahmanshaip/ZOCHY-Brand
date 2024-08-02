@@ -5,7 +5,7 @@ import {
   RouterProvider
 } from 'react-router-dom'
 import { Toaster } from 'sonner'
-import { Cart, Contact, Dashboard, ProductDetails } from './pages'
+import { Cart, Checkout, Contact, Dashboard, ProductDetails } from './pages'
 import RouteGuard from './auth/RouteGuard'
 import AdminDashboard from './pages/AdminDashboard'
 import { HandleData } from './shared'
@@ -17,6 +17,7 @@ function App() {
       <Route path='/product/:id' element={<ProductDetails />}/>,
       <Route path='/cart' element={<Cart />}/>,
       <Route path='/contact' element={<Contact />}/>,
+      <Route path='/checkout' element={<Checkout />}/>,
 
 
 

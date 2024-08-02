@@ -1,8 +1,8 @@
 import { useKindeAuth } from '@kinde-oss/kinde-auth-react'
 import emailjs from 'emailjs-com'
-import { ProductsDatum } from '../types'
 import { useState } from 'react'
 import { MdDone } from 'react-icons/md'
+import { ProductsDatum } from '../types'
 
 interface Quantities {
   [key: number]: number
@@ -11,18 +11,46 @@ const SendEmail = ({
   userCartProducts,
   totalPrice,
   quantities,
+  phoneNumber,
+  address,
+  apartment,
+  city,
 }: {
   userCartProducts: ProductsDatum[]
   totalPrice: number
   quantities: Quantities
+  phoneNumber: number
+  address: string
+  apartment: string
+  city: string
 }) => {
   const { user } = useKindeAuth()
   const [showModal, setShowModal] = useState(false)
-  const sendEmail = () => {
+  const [loading, setLoading] = useState(false)
+
+  const sendEmail = async () => {
+    if (
+      !phoneNumber ||
+      !apartment ||
+      !city ||
+      !address ||
+      !userCartProducts ||
+      !totalPrice ||
+      !quantities
+    ) {
+      return
+    }
     const emailData = {
       to_name: 'Zochy', // Replace with the recipient's name if available
       from_name: user?.given_name,
-      message: `Order Summary:\n\n${userCartProducts
+      message: `Order Summary:
+          email: ${user?.email}
+          phoneNumber: ${phoneNumber},
+          address: ${address},
+          apartment: ${apartment},
+          city: ${city}
+      
+      \n\n${userCartProducts
         .map(
           (product) =>
             `
@@ -33,21 +61,24 @@ const SendEmail = ({
         )
         .join('')}\nTotal Price: ${totalPrice} EG`,
     }
+
+    setLoading(true)
+
     try {
-      emailjs
-        .send(
-          'service_g6y2y5f',
-          'template_buobahu',
-          emailData,
-          '56SMsQMBO1xq8bL8V'
-        )
-        .then(() => {
-          setShowModal(true)
-        })
+      await emailjs.send(
+        'service_g6y2y5f',
+        'template_buobahu',
+        emailData,
+        '56SMsQMBO1xq8bL8V'
+      )
+      setShowModal(true)
     } catch (error) {
       console.error('Error sending email:', error)
+    } finally {
+      setLoading(false)
     }
   }
+
   return (
     <>
       <div>
@@ -55,7 +86,10 @@ const SendEmail = ({
           className='w-full text-white btn btn-outline bg-black'
           onClick={sendEmail}
         >
-          PROCEED TO CHECKOUT
+          Send Order
+          {loading && (
+            <span className='loading loading-spinner loading-xs'></span>
+          )}
         </button>
       </div>
       {showModal && (

@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react'
 import { useKindeAuth } from '@kinde-oss/kinde-auth-react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteCart } from '../app/feature/own-cart/ownCartSlice'
 import { RootState } from '../app/store'
 import { useDeleteData } from '../hooks/useDeleteData'
+import { useEditData } from '../hooks/useEditData'
 import { useFetchData } from '../hooks/useFetchData'
 import Layout from '../layout/Layout'
-import { ProductsDatum, TypeProducts } from '../types'
-import { useEditData } from '../hooks/useEditData'
+import { TypeProducts } from '../types'
 
-import { SendEmail } from '../shared'
+import { useNavigate } from 'react-router'
 
 interface Quantities {
   [key: number]: number
@@ -18,9 +18,10 @@ interface Quantities {
 const Card = () => {
   const dispatch = useDispatch()
   const { user } = useKindeAuth()
+  const navigate = useNavigate() 
   const userCart = useSelector((state: RootState) => state.ownCart.userCart)
 
-  const userCartItems = userCart?.data.filter(
+  const userCartItems = userCart?.data?.filter(
     (item) => item.attributes.userId === user?.id
   )
 
@@ -99,6 +100,18 @@ const Card = () => {
   const totalPrice = userCartProducts.reduce((acc, curr) => {
     return acc + curr!.attributes.price * (quantities[curr!.id] || 1)
   }, 0)
+
+
+  const handleCheckout = () => {
+    navigate('/checkout', {
+      state: {
+        products: userCartProducts,
+        userCartItems,
+        quantities,
+        totalPrice,
+      },
+    })
+  }
 
   return (
     <Layout>
@@ -196,13 +209,12 @@ const Card = () => {
               <span className='font-bold text-xl'>Total</span>
               <span className='font-bold text-xl'>{totalPrice} EG</span>
             </div>
-            {userCartProducts && (
-              <SendEmail
-                userCartProducts={userCartProducts as ProductsDatum[]}
-                totalPrice={totalPrice}
-                quantities={quantities}
-              />
-            )}
+            <button
+              onClick={handleCheckout}
+              className='btn bg-black text-white w-full'
+            >
+              Proceed to Checkout
+            </button>
           </div>
         </div>
       ) : (
@@ -215,3 +227,11 @@ const Card = () => {
 }
 
 export default Card
+
+{
+  /* <SendEmail
+  userCartProducts={userCartProducts as ProductsDatum[]}
+  totalPrice={totalPrice}
+  quantities={quantities}
+/> */
+}

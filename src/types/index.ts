@@ -104,3 +104,10 @@ export interface Attributes {
 export interface TypeOwnCart {
   data: Datum[];
 }
+
+export interface TypeCheckout {
+  phoneNumber: number;
+  address: string;
+  apartment: string;
+  city: string;
+}
