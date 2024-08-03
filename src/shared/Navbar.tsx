@@ -26,12 +26,12 @@ const Navbar = () => {
         <div className='flex h-16 items-center justify-between'>
           <div className='md:flex md:items-center md:gap-12'>
             <span className='sr-only'>Home</span>
-            <div className='text-center mt-3 w-40  object-cover'>
+            <div className='text-center mt-3 sm:w-32 w-20 object-cover'>
               <Link to={'/'}>
                 <img
                   src={logoImg}
                   alt='logo image'
-                  className='md:w-[100%] w-[70%]'
+                  className=''
                 />
               </Link>
             </div>
