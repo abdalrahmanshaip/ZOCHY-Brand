@@ -1,4 +1,3 @@
-import React from 'react'
 import Lottie from 'lottie-react'
 import LoadingAnimation from './LoadingAnimation.json'
 const LoadingPage = () => {
