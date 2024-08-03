@@ -5,10 +5,11 @@ import {
   RouterProvider
 } from 'react-router-dom'
 import { Toaster } from 'sonner'
-import { Cart, Checkout, Contact, Dashboard, ProductDetails } from './pages'
+import { Cart, Contact, Dashboard, ProductDetails } from './pages'
 import RouteGuard from './auth/RouteGuard'
 import AdminDashboard from './pages/AdminDashboard'
 import { HandleData } from './shared'
+import Checkout from './pages/Checkout'
 
 function App() {
   const router = createBrowserRouter(
