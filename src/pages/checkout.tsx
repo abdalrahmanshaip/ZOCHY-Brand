@@ -147,13 +147,10 @@ const Checkout = () => {
                   <p>Subtotal</p>
                   <p>LE {totalPrice} EG</p>
                 </div>
-                <div className='flex justify-between items-center'>
-                  <p>delivery</p>
-                  <p>LE {30} EG</p>
-                </div>
+
                 <div className='flex justify-between items-center text-2xl text-black'>
                   <p>Total</p>
-                  <p>LE {totalPrice + 30} EG</p>
+                  <p>LE {totalPrice} EG</p>
                 </div>
               </div>
             </div>

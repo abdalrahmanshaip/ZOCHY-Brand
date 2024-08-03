@@ -41,7 +41,7 @@ const SendEmail = ({
       return
     }
     const emailData = {
-      to_name: 'Zochy', // Replace with the recipient's name if available
+      to_name: 'Zochy',
       from_name: user?.given_name,
       message: `Order Summary:
           email: ${user?.email}

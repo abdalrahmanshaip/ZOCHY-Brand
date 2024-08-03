@@ -14,7 +14,10 @@ const Navbar = () => {
     { name: 'Cart', href: '/cart' },
     { name: 'Contact Us', href: '/contact' },
   ]
-  if (user?.id === 'kp_3780c11cb7f3443cbc2089a6582228f8') {
+  if (
+    user?.id === 'kp_3780c11cb7f3443cbc2089a6582228f8' ||
+    user?.id === 'kp_7ab5b8f8c2054636923333e270eba84f'
+  ) {
     links.push({ name: 'Admin Dashboard', href: '/admin-dashboard' })
   }
   return (
@@ -25,13 +28,12 @@ const Navbar = () => {
             <span className='sr-only'>Home</span>
             <div className='text-center mt-3 w-40  object-cover'>
               <Link to={'/'}>
-              
-              <img
-                src={logoImg}
-                alt='logo image'
-                className='md:w-[100%] w-[70%]'
+                <img
+                  src={logoImg}
+                  alt='logo image'
+                  className='md:w-[100%] w-[70%]'
                 />
-                </Link>
+              </Link>
             </div>
           </div>
 
@@ -66,9 +68,7 @@ const Navbar = () => {
 
             <div className='block md:hidden'>
               <details className='dropdown dropdown-end '>
-                <summary
-                  className={`btn m-1 bg-[#D1CCCA]`}
-                >
+                <summary className={`btn m-1 bg-[#D1CCCA]`}>
                   <CiMenuBurger size={20} />
                 </summary>
                 <ul
@@ -81,14 +81,14 @@ const Navbar = () => {
                         key={link.name}
                         className={` ${
                           pathName === link.href
-                            ? 'bg-black text-white p-1 rounded-xl' 
+                            ? 'bg-black text-white p-1 rounded-xl'
                             : ''
                         }  ${
-                        link.name === 'Cart' &&
-                        `${
-                          (cart?.data.length as number) > 0 && 'text-red-500'
-                        } `
-                      } `}
+                          link.name === 'Cart' &&
+                          `${
+                            (cart?.data.length as number) > 0 && 'text-red-500'
+                          } `
+                        } `}
                       >
                         <Link to={link.href}>{link.name}</Link>
                       </li>
