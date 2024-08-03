@@ -12,8 +12,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <KindeProvider
         clientId='b2e2e0b9e3f244638a435771e7e0b8ea'
         domain='https://localbrand.kinde.com'
-        redirectUri='http://localhost:5173'
-        logoutUri='http://localhost:5173'
+        redirectUri='https://zochy-brand.vercel.app/'
+        logoutUri='https://zochy-brand.vercel.app/'
       >
         <App />
       </KindeProvider>
