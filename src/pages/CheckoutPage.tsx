@@ -117,7 +117,7 @@ const CheckoutPage = () => {
                   <div className='top-item flex  items-center '>
                     <div>
                       <img
-                        src={`http://localhost:1337${product?.attributes.image.data[0].attributes.formats.thumbnail.url}`}
+                        src={`https://zochy-back-end-production.up.railway.app${product?.attributes.image.data[0].attributes.formats.thumbnail.url}`}
                         alt=''
                         className='w-20'
                       />

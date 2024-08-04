@@ -73,13 +73,13 @@ const AdminDashboard = () => {
                           <td className='flex justify-center'>
                             <img
                               className=''
-                              src={`http://localhost:1337${product.attributes.image.data[0].attributes?.formats.thumbnail.url}`}
+                              src={`https://zochy-back-end-production.up.railway.app${product.attributes.image.data[0].attributes?.formats.thumbnail.url}`}
                               alt={product.attributes.title}
                               width='100'
                             />
                             <img
                               className=''
-                              src={`http://localhost:1337${product.attributes.image.data[1].attributes?.formats.thumbnail.url}`}
+                              src={`https://zochy-back-end-production.up.railway.app${product.attributes.image.data[1].attributes?.formats.thumbnail.url}`}
                               alt={product.attributes.title}
                               width='100'
                             />

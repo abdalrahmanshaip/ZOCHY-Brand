@@ -19,7 +19,6 @@ const AddProduct = () => {
   } = useForm<PostProduct>()
 
   const onSubmit = async (data: PostProduct) => {
-    console.log(data, selectedFile1, selectedFile2)
     try {
       const returnedData = await addData(data, selectedFile1, selectedFile2)
       dispatch(addProducts(returnedData))

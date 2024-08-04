@@ -130,7 +130,7 @@ const Card = () => {
                     className='p-4 border-b border-gray-500 flex gap-4 mb-2'
                   >
                     <img
-                      src={`http://localhost:1337${product?.attributes.image.data[0].attributes.formats.thumbnail.url}`}
+                      src={`https://zochy-back-end-production.up.railway.app${product?.attributes.image.data[0].attributes.formats.thumbnail.url}`}
                       alt='img product'
                       className='w-52  object-cover rounded-md' // Tailwind CSS classes for styling
                     />

@@ -61,7 +61,7 @@ const ProductDetails = () => {
                 key={index}
               >
                 <img
-                  src={`http://localhost:1337${image.attributes?.formats?.large?.url}`}
+                  src={`https://zochy-back-end-production.up.railway.app${image.attributes?.formats?.large?.url}`}
                   className='w-[100%]'
                   alt={`Product image ${index + 1}`}
                 />
@@ -155,7 +155,7 @@ const ProductDetails = () => {
                 <>
                   <figure className='relative flex-shrink-0 h-96'>
                     <img
-                      src={`http://localhost:1337${product.attributes.image.data[0].attributes?.formats?.large?.url}`}
+                      src={`https://zochy-back-end-production.up.railway.app${product.attributes.image.data[0].attributes?.formats?.large?.url}`}
                       alt='Product Image'
                       className='w-full h-full object-cover rounded-md'
                     />
