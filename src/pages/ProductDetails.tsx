@@ -20,23 +20,28 @@ const ProductDetails = () => {
   }
   const { data: productAlsoLike } =
     useFetchData<TypeProducts>('products-admins?')
-  const productWithTheSameCategory = productAlsoLike?.data.filter(
-    (product) =>
-      product?.id !== data.data?.id &&
+    
+    const [selectedSize, setSelectedSize] = useState<string | null>(null)
+    const [quantity, setQuantity] = useState<number>(1)
+    if (loading || !data?.data?.attributes) {
+      return <LoadingPage />
+    }
+  
+    
+    const productWithTheSameCategory = productAlsoLike?.data.filter(
+      (product) =>
+        product?.id !== data.data?.id &&
       product.attributes.soldOut === false &&
-      product.attributes?.category === data.data.attributes?.category
-  )
-
-  const [selectedSize, setSelectedSize] = useState<string | null>(null)
-  const [quantity, setQuantity] = useState<number>(1)
-
-  const skeleton: JSX.Element[] = []
-  for (let i = 1; i <= (productWithTheSameCategory?.length || 0); i++) {
-    skeleton.push(
-      <div
+      product.attributes.category === data.data.attributes.category
+    )
+    
+    const skeleton: JSX.Element[] = []
+    for (let i = 1; i <= (productWithTheSameCategory?.length || 0); i++) {
+      skeleton.push(
+        <div
         className='gap-4 grid'
         key={i}
-      >
+        >
         <div className='skeleton h-32 w-full'></div>
         <div className='skeleton h-4 w-28'></div>
         <div className='skeleton h-4 w-full'></div>
@@ -44,10 +49,7 @@ const ProductDetails = () => {
       </div>
     )
   }
-
-  if (loading || !data?.data?.attributes) {
-    return <LoadingPage />
-  }
+  
 
   return (
     <Layout>
