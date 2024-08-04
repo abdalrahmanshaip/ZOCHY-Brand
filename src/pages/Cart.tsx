@@ -18,7 +18,7 @@ interface Quantities {
 const Card = () => {
   const dispatch = useDispatch()
   const { user } = useKindeAuth()
-  const navigate = useNavigate() 
+  const navigate = useNavigate()
   const userCart = useSelector((state: RootState) => state.ownCart.userCart)
 
   const userCartItems = userCart?.data?.filter(
@@ -37,7 +37,9 @@ const Card = () => {
 
   const userCartProducts = productsArray?.filter((product) =>
     userCartItems?.some(
-      (item) => Number(item.attributes.productId) === product?.id
+      (item) =>
+        Number(item.attributes.productId) === product?.id &&
+        product.attributes.maximumQuantity >= 1
     )
   )
 
@@ -100,7 +102,6 @@ const Card = () => {
   const totalPrice = userCartProducts.reduce((acc, curr) => {
     return acc + curr!.attributes.price * (quantities[curr!.id] || 1)
   }, 0)
-
 
   const handleCheckout = () => {
     navigate('/checkout', {

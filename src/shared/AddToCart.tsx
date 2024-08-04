@@ -10,10 +10,12 @@ const AddToCart = ({
   id,
   size,
   quantity,
+  maximumQuantity,
 }: {
   id: number
   size: string | null
   quantity: number
+  maximumQuantity: number
 }) => {
   const dispatch = useDispatch()
   const cartItem = useSelector((state: RootState) => state.ownCart.userCart)
@@ -55,6 +57,7 @@ const AddToCart = ({
       <div>
         <button
           className='btn bg-black text-white w-full'
+          disabled={maximumQuantity < 1}
           onClick={() => handleAddToCart(id)}
         >
           Add to cart

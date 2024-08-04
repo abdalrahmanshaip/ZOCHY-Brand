@@ -139,6 +139,7 @@ const ProductDetails = () => {
               id={data.data.id}
               size={selectedSize}
               quantity={quantity}
+              maximumQuantity={data.data.attributes.maximumQuantity}
             />
           </div>
         </div>

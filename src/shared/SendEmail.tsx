@@ -2,11 +2,18 @@ import { useKindeAuth } from '@kinde-oss/kinde-auth-react'
 import emailjs from 'emailjs-com'
 import { useState } from 'react'
 import { MdDone } from 'react-icons/md'
+import { useEditData } from '../hooks/useEditData'
 import { ProductsDatum } from '../types'
+import { useDispatch } from 'react-redux'
+import { editProducts } from '../app/feature/admin/productSlice'
 
 interface Quantities {
   [key: number]: number
 }
+interface UpdateProductRequest {
+  maximumQuantity: number
+}
+
 const SendEmail = ({
   userCartProducts,
   totalPrice,
@@ -24,9 +31,14 @@ const SendEmail = ({
   apartment: string
   city: string
 }) => {
+  const dispatch = useDispatch()
   const { user } = useKindeAuth()
   const [showModal, setShowModal] = useState(false)
   const [loading, setLoading] = useState(false)
+  const { editData } = useEditData<UpdateProductRequest>(
+    'products-admins',
+    'Product'
+  )
 
   const sendEmail = async () => {
     if (
@@ -40,22 +52,24 @@ const SendEmail = ({
     ) {
       return
     }
+
+    // Prepare the email data
     const emailData = {
       to_name: 'Zochy',
       from_name: user?.given_name,
       message: `Order Summary:
-          email: ${user?.email}
-          phoneNumber: ${phoneNumber},
-          address: ${address},
-          apartment: ${apartment},
-          city: ${city}
-      
+        email: ${user?.email}
+        phoneNumber: ${phoneNumber},
+        address: ${address},
+        apartment: ${apartment},
+        city: ${city}
+    
       \n\n${userCartProducts
         .map(
           (product) =>
             `
-          ${`http://localhost:1337${product?.attributes.image.data[0].attributes.formats.large.url}`}
-          ${product?.attributes.title}: ${quantities[product.id]} x ${
+        ${`http://localhost:1337${product?.attributes.image.data[0].attributes.formats.large.url}`}
+        ${product?.attributes.title}: ${quantities[product.id]} x ${
               product?.attributes.price
             } EG\n`
         )
@@ -65,6 +79,18 @@ const SendEmail = ({
     setLoading(true)
 
     try {
+      for (const product of userCartProducts) {
+        const productId = product.id
+        const orderedQuantity = quantities[productId]
+        const newQuantity = product.attributes.maximumQuantity - orderedQuantity
+        const updataData = await editData(
+          { maximumQuantity: newQuantity },
+          productId
+        )
+        dispatch(editProducts(updataData))
+      }
+
+      // Send the email
       await emailjs.send(
         'service_g6y2y5f',
         'template_buobahu',
@@ -112,15 +138,15 @@ const SendEmail = ({
               size={50}
             />
           </h3>
-          <p className='py-4 text-4xl'>Seccess</p>
-          <p className='text-xl text-gray-500'>we will conect with you soon</p>
+          <p className='py-4 text-4xl'>Success</p>
+          <p className='text-xl text-gray-500'>We will connect with you soon</p>
           <div className='modal-action'>
             <label
               htmlFor='my_modal_6'
               className='btn'
               onClick={() => setShowModal(false)}
             >
-              ok
+              OK
             </label>
           </div>
         </div>

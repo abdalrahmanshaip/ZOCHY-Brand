@@ -49,7 +49,7 @@ const Products = () => {
                       alt='Product Image'
                       className='w-full h-full object-cover rounded-md'
                     />
-                    {product.attributes.soldOut && (
+                    {product.attributes.soldOut || product.attributes.maximumQuantity < 1 && (
                       <div className='absolute inset-0 flex justify-center items-center bg-gray-500 bg-opacity-50'>
                         <span className='text-white text-2xl font-bold'>
                           Sold Out
@@ -96,7 +96,7 @@ const Products = () => {
                   <div className='mt-4'>
                     <button
                       className='btn bg-black text-white w-full hover:bg-gray-800'
-                      disabled={product.attributes.soldOut}
+                      disabled={product.attributes.soldOut || product.attributes.maximumQuantity < 1}
                       onClick={() => navigate(`/product/${product.id}`)}
                     >
                       More Details
