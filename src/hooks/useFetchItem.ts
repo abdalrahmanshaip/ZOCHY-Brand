@@ -10,7 +10,7 @@ export const useFetchItem = <T>(endPoint: string, id: number) => {
       try {
         setLoading(true)
         const response = await axios.get(
-          `http://localhost:1337/api/${endPoint}/${id}?populate=*`
+          `https://zochy-back-end-production.up.railway.app/api/${endPoint}/${id}?populate=*`
         )
         setData(response.data)
       } catch (error) {

@@ -7,7 +7,7 @@ export const useFetchData = <T>(endPoint: string) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:1337/api/${endPoint}populate=*`
+          `https://zochy-back-end-production.up.railway.app/api/${endPoint}populate=*`
         )
         setData(response.data)
       } catch (error) {

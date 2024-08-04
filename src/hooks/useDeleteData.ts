@@ -5,7 +5,7 @@ export const useDeleteData = (endPoint: string, successMessage: string) => {
   const deleteData = async (id: number) => {
     try {
       await axios.delete(
-        `http://localhost:1337/api/${endPoint}/${id}?populate=*`,
+        `https://zochy-back-end-production.up.railway.app/api/${endPoint}/${id}?populate=*`,
         {
           data: id,
         }

@@ -18,7 +18,7 @@ export const usePostData = <T>(endPoint: string, successMessage: string) => {
       }
 
       const response = await axios.post(
-        `http://localhost:1337/api/${endPoint}?populate=*`,
+        `https://zochy-back-end-production.up.railway.app/api/${endPoint}?populate=*`,
         formData,
         {
           headers: {

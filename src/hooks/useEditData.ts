@@ -6,7 +6,7 @@ export const useEditData = <T>(endPoint: string, successMessage: string) => {
     try {
       
       const response = await axios.put(
-        `http://localhost:1337/api/${endPoint}/${id}?populate=*`,
+        `https://zochy-back-end-production.up.railway.app/api/${endPoint}/${id}?populate=*`,
         {
           data: item
         }
