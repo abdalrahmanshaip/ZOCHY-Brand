@@ -49,13 +49,13 @@ const Products = () => {
                       alt='Product Image'
                       className='w-full h-full object-cover rounded-md'
                     />
-                    {product.attributes.soldOut || product.attributes.maximumQuantity < 1 && (
+                    {product.attributes.soldOut ||  product.attributes.maximumQuantity < 1 ? (
                       <div className='absolute inset-0 flex justify-center items-center bg-gray-500 bg-opacity-50'>
                         <span className='text-white text-2xl font-bold'>
                           Sold Out
                         </span>
                       </div>
-                    )}
+                    ) : null}
                   </figure>
                   <div className='mt-4 flex-grow'>
                     <div className=' mb-2'>

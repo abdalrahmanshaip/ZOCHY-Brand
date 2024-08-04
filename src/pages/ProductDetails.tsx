@@ -20,28 +20,28 @@ const ProductDetails = () => {
   }
   const { data: productAlsoLike } =
     useFetchData<TypeProducts>('products-admins?')
-    
-    const [selectedSize, setSelectedSize] = useState<string | null>(null)
-    const [quantity, setQuantity] = useState<number>(1)
-    if (loading || !data?.data?.attributes) {
-      return <LoadingPage />
-    }
-  
-    
-    const productWithTheSameCategory = productAlsoLike?.data.filter(
-      (product) =>
-        product?.id !== data.data?.id &&
-      product.attributes.soldOut === false &&
+
+  const [selectedSize, setSelectedSize] = useState<string | null>(null)
+  const [quantity, setQuantity] = useState<number>(1)
+
+  if (loading || !data?.data?.attributes) {
+    return <LoadingPage />
+  }
+
+  const productWithTheSameCategory = productAlsoLike?.data.filter(
+    (product) =>
+      product?.id !== data.data?.id &&
+      !product.attributes.soldOut &&
       product.attributes.category === data.data.attributes.category
-    )
-    
-    const skeleton: JSX.Element[] = []
-    for (let i = 1; i <= (productWithTheSameCategory?.length || 0); i++) {
-      skeleton.push(
-        <div
+  )
+
+  const skeleton: JSX.Element[] = []
+  for (let i = 1; i <= (productWithTheSameCategory?.length || 0); i++) {
+    skeleton.push(
+      <div
         className='gap-4 grid'
         key={i}
-        >
+      >
         <div className='skeleton h-32 w-full'></div>
         <div className='skeleton h-4 w-28'></div>
         <div className='skeleton h-4 w-full'></div>
@@ -49,7 +49,6 @@ const ProductDetails = () => {
       </div>
     )
   }
-  
 
   return (
     <Layout>
@@ -59,7 +58,7 @@ const ProductDetails = () => {
             {data.data.attributes.image.data.map((image, index) => (
               <div
                 id={`item${index + 1}`}
-                className='carousel-item w-full'
+                className='carousel-item w-full relative'
                 key={index}
               >
                 <img
@@ -67,6 +66,14 @@ const ProductDetails = () => {
                   className='w-[100%]'
                   alt={`Product image ${index + 1}`}
                 />
+                {data.data.attributes.soldOut ||
+                data.data.attributes.maximumQuantity < 1 ? (
+                  <div className='absolute inset-0 flex justify-center items-center bg-gray-500 bg-opacity-50'>
+                    <span className='text-white text-2xl font-bold'>
+                      Sold Out
+                    </span>
+                  </div>
+                ) : null}
               </div>
             ))}
           </div>
@@ -93,13 +100,11 @@ const ProductDetails = () => {
           <p className='title text-xl'>
             {data.data.attributes.oldPrice ? (
               <span className='line-through mr-4'>
-                {data.data.attributes.oldPrice
-                  ? 'LE ' + data.data.attributes.oldPrice + ' EG'
-                  : ''}
+                LE {data.data.attributes.oldPrice} EG
               </span>
             ) : (
               ''
-            )}{' '}
+            )}
             LE {data.data.attributes.price} EG
           </p>
           <div className='flex items-center gap-x-2'>
@@ -129,14 +134,14 @@ const ProductDetails = () => {
             </button>
             <span className='mx-4 text-xl'>{quantity}</span>
             <button
-              className='btn bg-black  btn-sm text-white'
+              className='btn bg-black btn-sm text-white'
               onClick={() => setQuantity((q) => q + 1)}
               disabled={quantity >= data.data.attributes.maximumQuantity}
             >
               +
             </button>
           </div>
-          <div >
+          <div>
             <AddToCart
               id={data.data.id}
               size={selectedSize}
@@ -162,7 +167,8 @@ const ProductDetails = () => {
                       alt='Product Image'
                       className='w-full h-full object-cover rounded-md'
                     />
-                    {product.attributes.soldOut && (
+                    {(product.attributes.soldOut ||
+                      product.attributes.maximumQuantity < 1) && (
                       <div className='absolute inset-0 flex justify-center items-center bg-gray-500 bg-opacity-50'>
                         <span className='text-white text-2xl font-bold'>
                           Sold Out
@@ -171,21 +177,19 @@ const ProductDetails = () => {
                     )}
                   </figure>
                   <div className='mt-4 flex-grow'>
-                    <div className=' justify-between items-center mb-2'>
+                    <div className='justify-between items-center mb-2'>
                       <h2 className='text-xl font-bold'>
                         {product.attributes.title}
                       </h2>
                       <p className='text-lg text-start'>
-                        {data.data.attributes.oldPrice ? (
+                        {product.attributes.oldPrice ? (
                           <span className='line-through mr-2'>
-                            {data.data.attributes.oldPrice
-                              ? 'LE ' + data.data.attributes.oldPrice + ' EG'
-                              : ''}
+                            LE {product.attributes.oldPrice} EG
                           </span>
                         ) : (
                           ''
-                        )}{' '}
-                        {product.attributes.price} EG
+                        )}
+                        LE {product.attributes.price} EG
                       </p>
                     </div>
                     <p className='text-sm text-gray-600'>
@@ -209,7 +213,10 @@ const ProductDetails = () => {
                   <div className='mt-4'>
                     <button
                       className='btn bg-black text-white w-full hover:bg-gray-800'
-                      disabled={product.attributes.soldOut}
+                      disabled={
+                        product.attributes.soldOut ||
+                        product.attributes.maximumQuantity < 1
+                      }
                       onClick={() => navigate(`/product/${product.id}`)}
                     >
                       More Details
