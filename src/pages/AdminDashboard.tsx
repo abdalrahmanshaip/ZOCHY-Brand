@@ -116,7 +116,7 @@ const AdminDashboard = () => {
                   ) : (
                     <tr>
                       <td
-                        colSpan={6}
+                        colSpan={8}
                         className='text-center text-2xl'
                       >
                         No data available
