@@ -29,6 +29,13 @@ const CheckoutPage = () => {
     setApartment(data.apartment)
     setCity(data.city)
   }
+  const size = 'large' || 'medium' || 'small' || 'thumbnail'
+  const url = 'https://zochy-back-end-production.up.railway.app'
+
+  const getImageUrl = (product: ProductsDatum) => {
+    const formats = product.attributes.image.data[0].attributes?.formats
+    return formats[size]?.url || formats['large']?.url || formats['medium']?.url || formats['small']?.url || formats['thumbnail']?.url
+  }
   return (
     <Layout>
       <div className=''>
@@ -117,7 +124,7 @@ const CheckoutPage = () => {
                   <div className='top-item flex  items-center '>
                     <div>
                       <img
-                        src={`https://zochy-back-end-production.up.railway.app${product?.attributes.image.data[0].attributes.formats.thumbnail.url}`}
+                        src={`${url}${getImageUrl(product)}`}
                         alt=''
                         className='w-20'
                       />

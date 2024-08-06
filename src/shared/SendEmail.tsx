@@ -39,7 +39,13 @@ const SendEmail = ({
     'products-admins',
     'Product'
   )
+  const size = 'large' || 'medium' || 'small' || 'thumbnail'
+  const url = 'https://zochy-back-end-production.up.railway.app'
 
+  const getImageUrl = (product: ProductsDatum) => {
+    const formats = product.attributes.image.data[0].attributes?.formats
+    return formats[size]?.url || formats['large']?.url || formats['medium']?.url || formats['small']?.url || formats['thumbnail']?.url
+  }
   const sendEmail = async () => {
     if (
       !phoneNumber ||
@@ -68,7 +74,7 @@ const SendEmail = ({
         .map(
           (product) =>
             `
-        ${`http://localhost:1337${product?.attributes.image.data[0].attributes.formats.large.url}`}
+        ${`${url}${getImageUrl(product)}`}
         ${product?.attributes.title}: ${quantities[product.id]} x ${
               product?.attributes.price
             } EG\n`

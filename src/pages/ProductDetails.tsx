@@ -6,7 +6,7 @@ import { useFetchItem } from '../hooks/useFetchItem'
 import Layout from '../layout/Layout'
 import LoadingPage from '../loading/LoadingPage'
 import { AddToCart } from '../shared'
-import { ItemProduct, TypeProducts } from '../types'
+import { ImageDatum, ItemProduct, ProductsDatum, TypeProducts } from '../types'
 
 const ProductDetails = () => {
   const { id } = useParams()
@@ -49,7 +49,18 @@ const ProductDetails = () => {
       </div>
     )
   }
+  const size = 'large' || 'medium' || 'small' || 'thumbnail'
+  const url = 'https://zochy-back-end-production.up.railway.app'
 
+  const getImageUrl = (image: ImageDatum) => {
+    const formats = image.attributes?.formats
+    return formats[size]?.url || formats['large']?.url || formats['medium']?.url || formats['small']?.url || formats['thumbnail']?.url
+  }
+
+  const getImageUrlForMayBeLike = (product: ProductsDatum) => {
+    const formats = product.attributes.image.data[0].attributes?.formats
+    return formats[size]?.url || formats['large']?.url || formats['medium']?.url || formats['small']?.url || formats['thumbnail']?.url
+  }
   return (
     <Layout>
       <div className='mx-auto max-w-screen-xl flex justify-center mt-5 flex-wrap gap-5'>
@@ -62,7 +73,7 @@ const ProductDetails = () => {
                 key={index}
               >
                 <img
-                  src={`https://zochy-back-end-production.up.railway.app${image.attributes?.formats?.large?.url}`}
+                  src={`${url}${getImageUrl(image)}`}
                   className='w-[100%]'
                   alt={`Product image ${index + 1}`}
                 />
@@ -163,7 +174,7 @@ const ProductDetails = () => {
                 <>
                   <figure className='relative flex-shrink-0 h-96'>
                     <img
-                      src={`https://zochy-back-end-production.up.railway.app${product.attributes.image.data[0].attributes?.formats?.large?.url}`}
+                      src={`${url}${getImageUrlForMayBeLike(product)}`}
                       alt='Product Image'
                       className='w-full h-full object-cover rounded-md'
                     />

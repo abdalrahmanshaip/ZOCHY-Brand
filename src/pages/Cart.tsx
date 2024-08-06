@@ -7,7 +7,7 @@ import { useDeleteData } from '../hooks/useDeleteData'
 import { useEditData } from '../hooks/useEditData'
 import { useFetchData } from '../hooks/useFetchData'
 import Layout from '../layout/Layout'
-import { TypeProducts } from '../types'
+import { ProductsDatum, TypeProducts } from '../types'
 
 import { useNavigate } from 'react-router'
 
@@ -113,7 +113,13 @@ const Card = () => {
       },
     })
   }
+    const size = 'large' || 'medium' || 'small' || 'thumbnail'
+  const url = 'https://zochy-back-end-production.up.railway.app'
 
+  const getImageUrl = (product: ProductsDatum) => {
+    const formats = product.attributes.image.data[0].attributes?.formats
+    return formats[size]?.url || formats['large']?.url || formats['medium']?.url || formats['small']?.url || formats['thumbnail']?.url
+  }
   return (
     <Layout>
       {userCartProducts.length > 0 ? (
@@ -131,7 +137,7 @@ const Card = () => {
                     className='p-4 border-b border-gray-500 flex gap-4 mb-2'
                   >
                     <img
-                      src={`https://zochy-back-end-production.up.railway.app${product?.attributes.image.data[0].attributes.formats.thumbnail.url}`}
+                      src={`${url}${getImageUrl(product!)}`}
                       alt='img product'
                       className='w-52  object-cover rounded-md' // Tailwind CSS classes for styling
                     />
@@ -228,11 +234,3 @@ const Card = () => {
 }
 
 export default Card
-
-{
-  /* <SendEmail
-  userCartProducts={userCartProducts as ProductsDatum[]}
-  totalPrice={totalPrice}
-  quantities={quantities}
-/> */
-}
