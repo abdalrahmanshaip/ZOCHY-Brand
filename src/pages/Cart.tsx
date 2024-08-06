@@ -1,5 +1,4 @@
 import { useKindeAuth } from '@kinde-oss/kinde-auth-react'
-import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteCart } from '../app/feature/own-cart/ownCartSlice'
 import { RootState } from '../app/store'
@@ -8,8 +7,8 @@ import { useEditData } from '../hooks/useEditData'
 import { useFetchData } from '../hooks/useFetchData'
 import Layout from '../layout/Layout'
 import { ProductsDatum, TypeProducts } from '../types'
-
 import { useNavigate } from 'react-router'
+import { useEffect, useState } from 'react'
 
 interface Quantities {
   [key: number]: number
@@ -21,11 +20,10 @@ const Card = () => {
   const navigate = useNavigate()
   const userCart = useSelector((state: RootState) => state.ownCart.userCart)
 
-  const userCartItems = userCart?.data?.filter(
-    (item) => item.attributes.userId === user?.id
-  )
+  const userCartItems =
+    userCart?.data?.filter((item) => item.attributes.userId === user?.id) || [] // Fallback to an empty array if userCartItems is undefined
 
-  const productIds = userCartItems?.map((item) => item.attributes.productId)
+  const productIds = userCartItems.map((item) => item.attributes.productId)
 
   const { data: productData } = useFetchData<TypeProducts>(
     `products-admins/?id=${productIds}&`
@@ -36,7 +34,7 @@ const Card = () => {
     : [productData?.data]
 
   const userCartProducts = productsArray?.filter((product) =>
-    userCartItems?.some(
+    userCartItems.some(
       (item) =>
         Number(item.attributes.productId) === product?.id &&
         product.attributes.maximumQuantity >= 1
@@ -51,23 +49,25 @@ const Card = () => {
   }
 
   const { editData } = useEditData('cart-items', 'quantity')
-  const [quantities, setQuantities] = useState<Quantities>({})
+  const [quantities, setQuantities] = useState<Quantities>(() => {
+    // Load quantities from localStorage
+    const savedQuantities = localStorage.getItem('cartQuantities')
+    return savedQuantities ? JSON.parse(savedQuantities) : userCartItems.reduce((acc, item) => {
+      acc[item.attributes.productId] = item.attributes.quantity
+      return acc
+    }, {} as Quantities)
+  })
 
   useEffect(() => {
-    if (userCartItems) {
-      const initialQuantities = userCartItems.reduce((acc, item) => {
-        acc[item.attributes.productId] = item.attributes.quantity
-        return acc
-      }, {} as Quantities)
-      setQuantities(initialQuantities)
-    }
-  }, [])
+    // Save quantities to localStorage whenever they change
+    localStorage.setItem('cartQuantities', JSON.stringify(quantities))
+  }, [quantities])
 
   const updateQuantityInApi = async (
     productId: number,
     newQuantity: number
   ) => {
-    const cartItem = userCartItems?.find(
+    const cartItem = userCartItems.find(
       (item) => Number(item.attributes.productId) === productId
     )
 
@@ -102,7 +102,6 @@ const Card = () => {
   const totalPrice = userCartProducts.reduce((acc, curr) => {
     return acc + curr!.attributes.price * (quantities[curr!.id] || 1)
   }, 0)
-
   const handleCheckout = () => {
     navigate('/checkout', {
       state: {
@@ -113,13 +112,21 @@ const Card = () => {
       },
     })
   }
-    const size = 'large' || 'medium' || 'small' || 'thumbnail'
+
+  const size = 'large' || 'medium' || 'small' || 'thumbnail'
   const url = 'https://zochy-back-end-production.up.railway.app'
 
   const getImageUrl = (product: ProductsDatum) => {
     const formats = product.attributes.image.data[0].attributes?.formats
-    return formats[size]?.url || formats['large']?.url || formats['medium']?.url || formats['small']?.url || formats['thumbnail']?.url
+    return (
+      formats[size]?.url ||
+      formats['large']?.url ||
+      formats['medium']?.url ||
+      formats['small']?.url ||
+      formats['thumbnail']?.url
+    )
   }
+
   return (
     <Layout>
       {userCartProducts.length > 0 ? (
@@ -127,7 +134,7 @@ const Card = () => {
           <div className='left text-right lg:w-[50%] w-full'>
             <div>
               {userCartProducts.map((product) => {
-                const cartItem = userCartItems?.find(
+                const cartItem = userCartItems.find(
                   (item) => Number(item.attributes.productId) === product?.id
                 )
 
@@ -139,7 +146,7 @@ const Card = () => {
                     <img
                       src={`${url}${getImageUrl(product!)}`}
                       alt='img product'
-                      className='w-52  object-cover rounded-md' // Tailwind CSS classes for styling
+                      className='w-52 object-cover rounded-md' // Tailwind CSS classes for styling
                     />
                     <div className='titles text-left w-full'>
                       <div className='flex justify-between items-center'>
