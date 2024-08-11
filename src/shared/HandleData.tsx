@@ -8,7 +8,7 @@ import {
 import { RootState } from '../app/store'
 import { useFetchData } from '../hooks/useFetchData'
 import { TypeProducts } from '../types'
-import { OwnCartState, setUserCart } from '../app/feature/own-cart/ownCartSlice'
+import { OwnCartState, setLoadingCart, setUserCart } from '../app/feature/own-cart/ownCartSlice'
 
 const HandleData = () => {
   const dispatch = useDispatch()
@@ -35,11 +35,12 @@ const HandleData = () => {
         dispatch(setProducts(products), setProductsFilter(products)) &&
         productsFilter &&
         dispatch(setProductsFilter(productsFilter)) &&
-      cart && dispatch(setUserCart(cart))
+      cart && dispatch(setUserCart(cart)) && dispatch(setLoadingCart(true))
     } catch (error) {
       console.error(error)
     } finally {
       dispatch(setLoadingProducts(false))
+      dispatch(setLoadingCart(false))
     }
   }, [products, productsFilter, cart, dispatch])
 

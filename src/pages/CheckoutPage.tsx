@@ -99,7 +99,8 @@ const CheckoutPage = () => {
               </div>
               <div className='mt-5'>
                 <SendEmail
-                  userCartProducts={products}
+                  products={products}
+                  userCartItems={userCartItems}
                   totalPrice={totalPrice}
                   quantities={quantities}
                   phoneNumber={phoneNumber}

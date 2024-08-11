@@ -1,5 +1,7 @@
 import { useKindeAuth } from '@kinde-oss/kinde-auth-react'
+import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router'
 import { deleteCart } from '../app/feature/own-cart/ownCartSlice'
 import { RootState } from '../app/store'
 import { useDeleteData } from '../hooks/useDeleteData'
@@ -7,8 +9,7 @@ import { useEditData } from '../hooks/useEditData'
 import { useFetchData } from '../hooks/useFetchData'
 import Layout from '../layout/Layout'
 import { ProductsDatum, TypeProducts } from '../types'
-import { useNavigate } from 'react-router'
-import { useEffect, useState } from 'react'
+import LoadingPage from '../loading/LoadingPage'
 
 interface Quantities {
   [key: number]: number
@@ -19,10 +20,12 @@ const Card = () => {
   const { user } = useKindeAuth()
   const navigate = useNavigate()
   const userCart = useSelector((state: RootState) => state.ownCart.userCart)
+  const cartLoading = useSelector(
+    (state: RootState) => state.ownCart.loadingCart
+  )
 
   const userCartItems =
-    userCart?.data?.filter((item) => item.attributes.userId === user?.id) || [] // Fallback to an empty array if userCartItems is undefined
-
+    userCart?.data?.filter((item) => item.attributes.userId === user?.id) || []
   const productIds = userCartItems.map((item) => item.attributes.productId)
 
   const { data: productData } = useFetchData<TypeProducts>(
@@ -41,27 +44,34 @@ const Card = () => {
     )
   )
 
+  const { editData } = useEditData('cart-items', 'quantity')
+  const [quantities, setQuantities] = useState<Quantities>(() => {
+    const savedQuantities = localStorage.getItem('cartQuantities')
+    return savedQuantities
+      ? JSON.parse(savedQuantities)
+      : userCartItems.reduce((acc, item) => {
+          acc[item.attributes.productId] = item.attributes.quantity
+          return acc
+        }, {} as Quantities)
+  })
+
   const { deleteData } = useDeleteData('cart-items', 'Cart item')
 
-  const handleDelete = (cartId: number) => {
+  const handleDelete = (cartId: number, productId: number) => {
+    setQuantities((prevQuantities) => {
+      const updatedQuantities = { ...prevQuantities }
+      delete updatedQuantities[productId]
+      localStorage.setItem('cartQuantities', JSON.stringify(updatedQuantities))
+      return updatedQuantities
+    })
+
     deleteData(cartId)
     dispatch(deleteCart(cartId))
   }
 
-  const { editData } = useEditData('cart-items', 'quantity')
-  const [quantities, setQuantities] = useState<Quantities>(() => {
-    // Load quantities from localStorage
-    const savedQuantities = localStorage.getItem('cartQuantities')
-    return savedQuantities ? JSON.parse(savedQuantities) : userCartItems.reduce((acc, item) => {
-      acc[item.attributes.productId] = item.attributes.quantity
-      return acc
-    }, {} as Quantities)
-  })
-
-  useEffect(() => {
-    // Save quantities to localStorage whenever they change
-    localStorage.setItem('cartQuantities', JSON.stringify(quantities))
-  }, [quantities])
+  const updateLocalStorage = (newQuantities: Quantities) => {
+    localStorage.setItem('cartQuantities', JSON.stringify(newQuantities))
+  }
 
   const updateQuantityInApi = async (
     productId: number,
@@ -80,28 +90,33 @@ const Card = () => {
     setQuantities((prevQuantities) => {
       const currentQuantity = prevQuantities[productId] || 1
       const newQuantity = Math.max(currentQuantity - 1, 1)
-      updateQuantityInApi(productId, newQuantity) // Update API
-      return {
+      updateQuantityInApi(productId, newQuantity)
+      const updatedQuantities = {
         ...prevQuantities,
         [productId]: newQuantity,
       }
+      updateLocalStorage(updatedQuantities)
+      return updatedQuantities
     })
   }
 
   const increaseQuantity = (productId: number) => {
     setQuantities((prevQuantities) => {
       const newQuantity = (prevQuantities[productId] || 1) + 1
-      updateQuantityInApi(productId, newQuantity) // Update API
-      return {
+      updateQuantityInApi(productId, newQuantity)
+      const updatedQuantities = {
         ...prevQuantities,
         [productId]: newQuantity,
       }
+      updateLocalStorage(updatedQuantities)
+      return updatedQuantities
     })
   }
 
   const totalPrice = userCartProducts.reduce((acc, curr) => {
     return acc + curr!.attributes.price * (quantities[curr!.id] || 1)
   }, 0)
+
   const handleCheckout = () => {
     navigate('/checkout', {
       state: {
@@ -126,6 +141,13 @@ const Card = () => {
       formats['thumbnail']?.url
     )
   }
+
+  if (cartLoading)
+    return (
+      <div>
+        <LoadingPage />
+      </div>
+    )
 
   return (
     <Layout>
@@ -155,7 +177,9 @@ const Card = () => {
                         </h1>
                         <h1
                           className='text-2xl text-gray-500 cursor-pointer text-center w-16 h-10'
-                          onClick={() => cartItem && handleDelete(cartItem?.id)}
+                          onClick={() =>
+                            cartItem && handleDelete(cartItem.id, product!.id)
+                          }
                         >
                           x
                         </h1>
@@ -174,8 +198,7 @@ const Card = () => {
                       </p>
                       <div className='flex gap-2'>
                         <span className='mr-2 btn btn-sm'>
-                          {cartItem?.attributes.size}{' '}
-                          {/* Show only the selected size */}
+                          {cartItem?.attributes.size}
                         </span>
                       </div>
                       <div className='flex items-center my-5'>
@@ -187,7 +210,7 @@ const Card = () => {
                             -
                           </button>
                           <span className='mx-4 text-xl'>
-                            {quantities[product!.id]} {/* Default to 1 */}
+                            {quantities[product!.id] || 1}
                           </span>
                           <button
                             className='btn bg-black btn-sm text-white'

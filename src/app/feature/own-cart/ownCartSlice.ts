@@ -3,9 +3,11 @@ import { TypeOwnCart } from '../../../types'
 
 export interface OwnCartState {
   userCart: TypeOwnCart | null
+  loadingCart: boolean
 }
 const initialState: OwnCartState = {
   userCart: null,
+  loadingCart: false,
 }
 export const OwnCartSlice = createSlice({
   name: 'cart',
@@ -17,6 +19,9 @@ export const OwnCartSlice = createSlice({
     addCart: (state, action) => {
       state.userCart?.data.push(action.payload)
     },
+    setLoadingCart: (state, action) => {
+      state.loadingCart = action.payload
+    },
     deleteCart: (state, action) => {
       if (state.userCart) {
         state.userCart.data = state.userCart.data.filter(
@@ -27,6 +32,6 @@ export const OwnCartSlice = createSlice({
   },
 })
 
-export const { setUserCart, addCart, deleteCart } = OwnCartSlice.actions
+export const { setUserCart, addCart, setLoadingCart, deleteCart } = OwnCartSlice.actions
 
 export default OwnCartSlice.reducer

@@ -23,7 +23,6 @@ const EditProduct = ({ id }: { id: number }) => {
     reset,
     formState: { errors },
   } = useForm<PostProduct>()
-  // console.log(data.data.attributes.soldOut)
   useEffect(() => {
     if (data) {
       reset({

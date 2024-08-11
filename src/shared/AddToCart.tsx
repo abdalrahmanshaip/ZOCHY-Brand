@@ -24,11 +24,14 @@ const AddToCart = ({
   const [showModal, setShowModal] = useState(false)
 
   const handleAddToCart = async (idProduct: number) => {
-    const isProductInCart = cartItem?.data.some(
+    const userCartItems =
+      cartItem?.data?.filter((item) => item.attributes.userId === user?.id) ||
+      []
+    const isProductInCart = userCartItems.some(
       (cart) => cart.attributes.productId == idProduct
     )
     if (!user) {
-      setShowModal(true) // Show the modal if the user is not logged in
+      setShowModal(true)
       return
     } else if (!size) {
       toast.error('No size selected')

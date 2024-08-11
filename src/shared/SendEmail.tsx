@@ -15,7 +15,8 @@ interface UpdateProductRequest {
 }
 
 const SendEmail = ({
-  userCartProducts,
+  products,
+  userCartItems,
   totalPrice,
   quantities,
   phoneNumber,
@@ -23,7 +24,8 @@ const SendEmail = ({
   apartment,
   city,
 }: {
-  userCartProducts: ProductsDatum[]
+  products: ProductsDatum[]
+  userCartItems: ProductsDatum[]
   totalPrice: number
   quantities: Quantities
   phoneNumber: number
@@ -44,7 +46,13 @@ const SendEmail = ({
 
   const getImageUrl = (product: ProductsDatum) => {
     const formats = product.attributes.image.data[0].attributes?.formats
-    return formats[size]?.url || formats['large']?.url || formats['medium']?.url || formats['small']?.url || formats['thumbnail']?.url
+    return (
+      formats[size]?.url ||
+      formats['large']?.url ||
+      formats['medium']?.url ||
+      formats['small']?.url ||
+      formats['thumbnail']?.url
+    )
   }
   const sendEmail = async () => {
     if (
@@ -52,7 +60,7 @@ const SendEmail = ({
       !apartment ||
       !city ||
       !address ||
-      !userCartProducts ||
+      !products ||
       !totalPrice ||
       !quantities
     ) {
@@ -70,11 +78,12 @@ const SendEmail = ({
         apartment: ${apartment},
         city: ${city}
     
-      \n\n${userCartProducts
+      \n\n${products
         .map(
           (product) =>
             `
         ${`${url}${getImageUrl(product)}`}
+        ${userCartItems.map((product) => 'size: ' + product.attributes.size)}
         ${product?.attributes.title}: ${quantities[product.id]} x ${
               product?.attributes.price
             } EG\n`
@@ -85,7 +94,7 @@ const SendEmail = ({
     setLoading(true)
 
     try {
-      for (const product of userCartProducts) {
+      for (const product of products) {
         const productId = product.id
         const orderedQuantity = quantities[productId]
         const newQuantity = product.attributes.maximumQuantity - orderedQuantity
